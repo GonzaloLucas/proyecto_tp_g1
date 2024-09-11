@@ -16,7 +16,22 @@ def lista_fechas_random():
             dia = random.randint(1, 30)    
         fecha = f"{dia}/{mes}    {hora:02}:{minutos:02}"
         fechas.append(fecha)
-
     return fechas
 
-print(lista_fechas_random())
+def ListaDoctores():
+    lista_de_fechas= lista_fechas_random()
+    doctores = [
+    "Dr. Juan Pérez", "Dr. María González", "Dr. Carlos Ramírez", "Dr. Ana Martínez", "Dr. José Hernández",
+    "Dr. Laura López", "Dr. Luis Fernández", "Dr. Carmen Ortiz", "Dr. Manuel García", "Dr. Elena Díaz",
+    "Dr. Alberto Sánchez", "Dr. Patricia Torres", "Dr. Jorge Romero", "Dr. Lucía Castro", "Dr. Andrés Moreno",
+    "Dr. Adriana Reyes", "Dr. Antonio Jiménez", "Dr. Beatriz Vargas", "Dr. Ricardo Soto", "Dr. Claudia Peña",
+    "Dr. Alejandro Silva", "Dr. Verónica Flores", "Dr. Eduardo Muñoz", "Dr. Gabriela Castillo", "Dr. Francisco Paredes",
+    "Dr. Daniela Mendoza", "Dr. Raúl Rivas", "Dr. Teresa Serrano", "Dr. Sergio Aguilar", "Dr. Pilar Ponce"
+]
+    random.shuffle(doctores)
+    listadoc = [{doctor: lista_de_fechas} for doctor in doctores[:5]]
+    for i in listadoc:
+        print(i)
+    return listadoc
+
+ListaDoctores()
