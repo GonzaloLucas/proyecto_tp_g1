@@ -35,24 +35,16 @@ def ListaDoctores():
     return listadoc
 
 def ListaEspecialidades():
+    listadoctor = ListaDoctores()
     especialidades = [
-        'Cardiologia', 'Dermatologia', 'Cirugia General', 'Endocrinologia', 
-        'Gastroenterologia', 'Ginecologia', 'Neumonologia', 'Neurocirugia', 
-        'Nutricion', 'Oftalmologia', 'Pediatria', 'Psiquiatria', 'Traumatologia'
+        'Cardiologia', 'Dermatologia', 'Cirugia General', 'Endocrinologia',
+        'Gastroenterologia', 'Ginecologia', 'Neumonologia', 'Neurocirugia',
+        'Oftalmologia', 'Pediatria', 'Psiquiatria', 'Traumatologia'
     ]
-    return especialidades
-    
-def ElegirEspecialidad():
-    opciones = ListaEspecialidades()
-    print("Departamentos de Especialidades:")
-    for especialidad in opciones:
-        print(f"- {especialidad}")
-    eleccion = input("Por favor, eliga una especialidad de la lista: ")
-    while eleccion not in opciones:
-        print("Eleccion no presente en la lista. Por favor, seleccione una opcion válida.")
-        eleccion = input("Por favor, eliga una especialidad de la lista: ")
-    print(f"Seleccionaste la especialidad: {especialidad}")
-    return eleccion
 
-ListaDoctores()
-ElegirEspecialidad()
+    for i in range(len(especialidades)):
+        listaespecialidades = [{esp: listadoctor} for esp in especialidades[:12]]
+        print (f"\n{listaespecialidades[i]}") #este print es para confirmar a ver si se juntaron los valores correctamente, se puede quitar
+    return listaespecialidades
+
+ListaEspecialidades()
