@@ -34,4 +34,25 @@ def ListaDoctores():
         print(i)
     return listadoc
 
+def ListaEspecialidades():
+    especialidades = [
+        'Cardiologia', 'Dermatologia', 'Cirugia General', 'Endocrinologia', 
+        'Gastroenterologia', 'Ginecologia', 'Neumonologia', 'Neurocirugia', 
+        'Nutricion', 'Oftalmologia', 'Pediatria', 'Psiquiatria', 'Traumatologia'
+    ]
+    return especialidades
+    
+def ElegirEspecialidad():
+    opciones = ListaEspecialidades()
+    print("Departamentos de Especialidades:")
+    for especialidad in opciones:
+        print(f"- {especialidad}")
+    eleccion = input("Por favor, eliga una especialidad de la lista: ")
+    while eleccion not in opciones:
+        print("Eleccion no presente en la lista. Por favor, seleccione una opcion válida.")
+        eleccion = input("Por favor, eliga una especialidad de la lista: ")
+    print(f"Seleccionaste la especialidad: {especialidad}")
+    return eleccion
+
 ListaDoctores()
+ElegirEspecialidad()
