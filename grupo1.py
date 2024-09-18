@@ -30,8 +30,6 @@ def ListaDoctores():
 ]
     random.shuffle(doctores)
     listadoc = [{doctor: lista_de_fechas} for doctor in doctores[:5]]
-    for i in listadoc:
-        print(i)
     return listadoc
 
 def ListaEspecialidades():
@@ -44,7 +42,22 @@ def ListaEspecialidades():
 
     for i in range(len(especialidades)):
         listaespecialidades = [{esp: listadoctor} for esp in especialidades[:12]]
-        print (f"\n{listaespecialidades[i]}") #este print es para confirmar a ver si se juntaron los valores correctamente, se puede quitar
     return listaespecialidades
 
+def DatosUsuario():
+    dni= input("Ingrese su DNI: ")
+    while True:
+        if dni.isdigit() == True and len(dni) == 8:
+            break
+        else:
+            print("El numero de dni fue ingresado de forma erronea")
+            dni= input("Ingrese su DNI: ")
+    nombre = input("Ingrese su nombre/s: ")
+    apellido = input("Ingrese su apellido/s: ")
+    obra_social = input("Ingrese su Obra Social: ")
+    dic = {dni: [nombre.title(), apellido.title(), obra_social.title()]}
+    return dic
+    
 ListaEspecialidades()
+
+usuario = DatosUsuario()
