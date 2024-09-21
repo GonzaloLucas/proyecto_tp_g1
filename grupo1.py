@@ -40,7 +40,7 @@ def DiccEspecialidades():
         'Oftalmologia', 'Pediatria', 'Psiquiatria', 'Traumatologia'
     ]
 
-    dicc_especialidades = {esp: listadoctor for esp in range(len(especialidades))}
+    dicc_especialidades = {i: listadoctor for i in especialidades[:12]}
     return dicc_especialidades
 
 def DatosUsuario():
@@ -54,30 +54,73 @@ def DatosUsuario():
     nombre = input("Ingrese su nombre/s: ")
     apellido = input("Ingrese su apellido/s: ")
     obra_social = input("Ingrese su Obra Social: ")
-    dic = {dni: [nombre.title(), apellido.title(), obra_social.title()]}
+    dic = []
+    dic.append(nombre.title())
+    dic.append(apellido.title())
+    dic.append(dni)
+    dic.append(obra_social.title())
     return dic
 
+def ImpresionTurno(especialidad_usuario, doctor_usuario, horario_usuario, usuario):
+    print("-"*100)
+    print("Reserva de turno".center(40))
+    print()
+    print(f'Especialidad:{"."*25} {especialidad_usuario}')
+    print(f'Doctor:{"."*25} {doctor_usuario}')
+    print(f'Horario:{"."*25} {horario_usuario}')
+    print(f'Información personal:{"."*25} {usuario[0]} {usuario[1]} DNI:{usuario[2]} Obra Social:{usuario[3]}')
+    print("-"*100)
+    print()
 
 #Main
 especialidades = DiccEspecialidades()
 usuario = DatosUsuario()
-
 especialidad = especialidades.keys()
-doctor = especialidades.values()
-#horario = doctor.values()
+
 
 lista_especialidad = list(especialidad)
-lista_doctor = list(doctor)
-#lista_horario = list(horario)
-lista_complementaria_especialidad = []
-lista_complementaria_doctor = []
-#lista_complementaria_horario = []
+lista_complementaria_especialidad = [i+1 for i in range(len(lista_especialidad))]
+especialidad_usuario = 0
+doctor = 0
+lista_doctor = 0
+lista_complementaria_doctor = 0
+doctor_usuario = 0
+horario = 0
+lista_horario = 0
+lista_complementaria_horario = 0
+horario_usuario = 0
+decision = input("Desea reservar un turno? (y/n): ")
 
-for i in range(len(especialidad)):
-    lista_complementaria_especialidad.append(i)
+while True:
+    if decision == "y":
+        for i in range(len(lista_especialidad)):
+            print(f"{lista_complementaria_especialidad[i]} {lista_especialidad[i]}")
 
-for i in range(len(lista_doctor)):
-    lista_complementaria_doctor.append(i)
+        print()
+        desicion1 = int(input("Ingrese el número correspondiente a la especialidad que desee: "))
+        if desicion1 in lista_complementaria_especialidad:
+            especialidad_usuario = lista_especialidad[desicion1 - 1]
+            doctor = especialidades.get(especialidad_usuario)
+            lista_doctor = list(doctor)
+            lista_complementaria_doctor = [i+1 for i in range(len(lista_doctor))]
+            for i in range(len(lista_doctor)):
+                print(f"{lista_complementaria_doctor[i]} {lista_doctor[i]}")
+            print()
+            desicion2 = int(input("Ingrese el número correspondiente al doctor que desee: "))
+            if desicion2 in lista_complementaria_doctor:
+                doctor_usuario = lista_doctor[desicion2 - 1]
+            horario = doctor.get(doctor_usuario)
+            lista_horario = list(horario)
+            lista_complementaria_horario = [i+1 for i in range(len(lista_horario))]
+            for i in range(len(lista_horario)):
+                print(f"{lista_complementaria_horario[i]} {lista_horario[i]}")
+            desicion3 = int(input("Ingrese el numero correspondiente al horario que desee: "))
+            if desicion3 in lista_complementaria_horario:
+                horario_usuario = lista_horario[desicion3 -1]
+            ImpresionTurno(especialidad_usuario, doctor_usuario, horario_usuario, usuario)
+        break
 
-#for i in range(len(lista_horario)):
-#    lista_complementaria_horario.append(i)
+    else:
+        break
+
+
