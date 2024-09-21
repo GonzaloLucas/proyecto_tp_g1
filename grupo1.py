@@ -18,7 +18,7 @@ def lista_fechas_random():
         fechas.append(fecha)
     return fechas
 
-def ListaDoctores():
+def DiccDoctores():
     lista_de_fechas= lista_fechas_random()
     doctores = [
     "Dr. Juan Pérez", "Dr. María González", "Dr. Carlos Ramírez", "Dr. Ana Martínez", "Dr. José Hernández",
@@ -29,20 +29,19 @@ def ListaDoctores():
     "Dr. Daniela Mendoza", "Dr. Raúl Rivas", "Dr. Teresa Serrano", "Dr. Sergio Aguilar", "Dr. Pilar Ponce"
 ]
     random.shuffle(doctores)
-    listadoc = [{doctor: lista_de_fechas} for doctor in doctores[:5]]
-    return listadoc
+    dicc_doc = {doctor: lista_de_fechas for doctor in doctores[:5]}
+    return dicc_doc
 
-def ListaEspecialidades():
-    listadoctor = ListaDoctores()
+def DiccEspecialidades():
+    listadoctor = DiccDoctores()
     especialidades = [
         'Cardiologia', 'Dermatologia', 'Cirugia General', 'Endocrinologia',
         'Gastroenterologia', 'Ginecologia', 'Neumonologia', 'Neurocirugia',
         'Oftalmologia', 'Pediatria', 'Psiquiatria', 'Traumatologia'
     ]
 
-    for i in range(len(especialidades)):
-        listaespecialidades = [{esp: listadoctor} for esp in especialidades[:12]]
-    return listaespecialidades
+    dicc_especialidades = {esp: listadoctor for esp in range(len(especialidades))}
+    return dicc_especialidades
 
 def DatosUsuario():
     dni= input("Ingrese su DNI: ")
@@ -57,7 +56,28 @@ def DatosUsuario():
     obra_social = input("Ingrese su Obra Social: ")
     dic = {dni: [nombre.title(), apellido.title(), obra_social.title()]}
     return dic
-    
-ListaEspecialidades()
 
+
+#Main
+especialidades = DiccEspecialidades()
 usuario = DatosUsuario()
+
+especialidad = especialidades.keys()
+doctor = especialidades.values()
+#horario = doctor.values()
+
+lista_especialidad = list(especialidad)
+lista_doctor = list(doctor)
+#lista_horario = list(horario)
+lista_complementaria_especialidad = []
+lista_complementaria_doctor = []
+#lista_complementaria_horario = []
+
+for i in range(len(especialidad)):
+    lista_complementaria_especialidad.append(i)
+
+for i in range(len(lista_doctor)):
+    lista_complementaria_doctor.append(i)
+
+#for i in range(len(lista_horario)):
+#    lista_complementaria_horario.append(i)
