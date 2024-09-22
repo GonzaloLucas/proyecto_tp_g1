@@ -62,14 +62,16 @@ def DatosUsuario():
     return dic
 
 def ImpresionTurno(especialidad_usuario, doctor_usuario, horario_usuario, usuario):
-    print("-"*100)
+    print("-"*63)
     print("Reserva de turno".center(40))
     print()
-    print(f'Especialidad:{"."*25} {especialidad_usuario}')
-    print(f'Doctor:{"."*25} {doctor_usuario}')
-    print(f'Horario:{"."*25} {horario_usuario}')
-    print(f'Información personal:{"."*25} {usuario[0]} {usuario[1]} DNI:{usuario[2]} Obra Social:{usuario[3]}')
-    print("-"*100)
+    print(f'Especialidad:{"."*28} {especialidad_usuario}')
+    print(f'Doctor:{"."*34} {doctor_usuario}')
+    print(f'Horario:{"."*33} {horario_usuario}')
+    print(f'Nombre completo:{"."*25} {usuario[0]} {usuario[1]}')
+    print(f'DNI:{"."*37} {usuario[2]}')
+    print(f'Obra Social:{"."*29} {usuario[3]}')
+    print("-"*63)
     print()
 
 #Main
@@ -97,30 +99,50 @@ while True:
             print(f"{lista_complementaria_especialidad[i]} {lista_especialidad[i]}")
 
         print()
-        desicion1 = int(input("Ingrese el número correspondiente a la especialidad que desee: "))
-        if desicion1 in lista_complementaria_especialidad:
-            especialidad_usuario = lista_especialidad[desicion1 - 1]
-            doctor = especialidades.get(especialidad_usuario)
-            lista_doctor = list(doctor)
-            lista_complementaria_doctor = [i+1 for i in range(len(lista_doctor))]
-            for i in range(len(lista_doctor)):
-                print(f"{lista_complementaria_doctor[i]} {lista_doctor[i]}")
-            print()
+        
+        while True:
+            desicion1 = int(input("Ingrese el número correspondiente a la especialidad que desee: "))
+            if 1 <= desicion1 <= len(lista_complementaria_especialidad):
+                especialidad_usuario = lista_especialidad[desicion1 - 1]
+                break
+            else:
+                print("Valor fuera de rango. Por favor, ingrese un número válido.")
+
+        doctor = especialidades.get(especialidad_usuario)
+        lista_doctor = list(doctor)
+        lista_complementaria_doctor = [i+1 for i in range(len(lista_doctor))]
+        for i in range(len(lista_doctor)):
+            print(f"{lista_complementaria_doctor[i]} {lista_doctor[i]}")
+        print()
+
+        while True:
             desicion2 = int(input("Ingrese el número correspondiente al doctor que desee: "))
-            if desicion2 in lista_complementaria_doctor:
+            if 1 <= desicion2 <= len(lista_complementaria_doctor):
                 doctor_usuario = lista_doctor[desicion2 - 1]
-            horario = doctor.get(doctor_usuario)
-            lista_horario = list(horario)
-            lista_complementaria_horario = [i+1 for i in range(len(lista_horario))]
-            for i in range(len(lista_horario)):
-                print(f"{lista_complementaria_horario[i]} {lista_horario[i]}")
-            desicion3 = int(input("Ingrese el numero correspondiente al horario que desee: "))
-            if desicion3 in lista_complementaria_horario:
-                horario_usuario = lista_horario[desicion3 -1]
-            ImpresionTurno(especialidad_usuario, doctor_usuario, horario_usuario, usuario)
+                break
+            else:
+                print("Valor fuera de rango. Por favor, ingrese un número válido.")
+
+        horario = doctor.get(doctor_usuario)
+        lista_horario = list(horario)
+        lista_complementaria_horario = [i+1 for i in range(len(lista_horario))]
+        for i in range(len(lista_horario)):
+            print(f"{lista_complementaria_horario[i]} {lista_horario[i]}")
+        print()
+
+        while True:
+            desicion3 = int(input("Ingrese el número correspondiente al horario que desee: "))
+            if 1 <= desicion3 <= len(lista_complementaria_horario):
+                horario_usuario = lista_horario[desicion3 - 1]
+                break
+            else:
+                print("Valor fuera de rango. Por favor, ingrese un número válido.")
+
+        ImpresionTurno(especialidad_usuario, doctor_usuario, horario_usuario, usuario)
         break
 
     else:
         break
+
 
 
