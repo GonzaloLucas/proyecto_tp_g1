@@ -92,6 +92,7 @@ lista_horario = 0
 lista_complementaria_horario = 0
 horario_usuario = 0
 decision = input("Desea reservar un turno? (y/n): ")
+matriz_especialidad = [[lista_complementaria_especialidad[i], lista_especialidad[i]] for i in range(len(lista_especialidad))]
 
 while True:
     if decision == "y":
@@ -102,22 +103,24 @@ while True:
         
         while True:
             desicion1 = int(input("Ingrese el número correspondiente a la especialidad que desee: "))
-            if 1 <= desicion1 <= len(lista_complementaria_especialidad):
+            if 1 <= desicion1 <= len(matriz_especialidad):
                 especialidad_usuario = lista_especialidad[desicion1 - 1]
-                break
+                print(f"Has seleccionado: {especialidad_usuario}")
+                break 
             else:
                 print("Valor fuera de rango. Por favor, ingrese un número válido.")
 
         doctor = especialidades.get(especialidad_usuario)
         lista_doctor = list(doctor)
         lista_complementaria_doctor = [i+1 for i in range(len(lista_doctor))]
+        matriz_doctor = [[lista_complementaria_doctor[i], lista_doctor[i]] for i in range(len(lista_doctor))]
         for i in range(len(lista_doctor)):
             print(f"{lista_complementaria_doctor[i]} {lista_doctor[i]}")
         print()
 
         while True:
             desicion2 = int(input("Ingrese el número correspondiente al doctor que desee: "))
-            if 1 <= desicion2 <= len(lista_complementaria_doctor):
+            if 1 <= desicion2 <= len(matriz_doctor):
                 doctor_usuario = lista_doctor[desicion2 - 1]
                 break
             else:
@@ -126,13 +129,14 @@ while True:
         horario = doctor.get(doctor_usuario)
         lista_horario = list(horario)
         lista_complementaria_horario = [i+1 for i in range(len(lista_horario))]
+        matriz_horario = [[lista_complementaria_horario[i], lista_horario[i]] for i in range(len(lista_horario))]
         for i in range(len(lista_horario)):
             print(f"{lista_complementaria_horario[i]} {lista_horario[i]}")
         print()
 
         while True:
             desicion3 = int(input("Ingrese el número correspondiente al horario que desee: "))
-            if 1 <= desicion3 <= len(lista_complementaria_horario):
+            if 1 <= desicion3 <= len(matriz_horario):
                 horario_usuario = lista_horario[desicion3 - 1]
                 break
             else:
