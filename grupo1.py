@@ -1,27 +1,44 @@
 import random
+import json
 
 def DiccEspecialidades():
     fechas_1 = []
     fechas_2 = []
     variable = (0, 30)
     
-    for i in range(10):
-        hora_1 = random.randint(7, 14)
-        hora_2 = random.randint(15, 22)
-        minutos = random.choice(variable)
-        mes = random.randint(1, 12)
+    def PrimerasFechas():
+        for i in range(10):
+            hora_1 = random.randint(7, 14)
+            minutos = random.choice(variable)
+            mes = random.randint(1, 12)
 
-        if mes == 2:
-            dia = random.randint(1, 28)
-        elif mes in [1, 3, 5, 7, 8, 10, 12]:
-            dia = random.randint(1, 31)
-        else:
-            dia = random.randint(1, 30)    
-        fecha_1 = f"{dia}/{mes}    {hora_1:02}:{minutos:02}"
-        fecha_2 = f"{dia}/{mes}    {hora_2:02}:{minutos:02}"
-        fechas_1.append(fecha_1)
-        fechas_2.append(fecha_2)
-        
+            if mes == 2:
+                dia = random.randint(1, 28)
+            elif mes in [1, 3, 5, 7, 8, 10, 12]:
+                dia = random.randint(1, 31)
+            else:
+                dia = random.randint(1, 30)    
+            fecha_1 = f"{dia}/{mes}    {hora_1:02}:{minutos:02}"
+            fechas_1.append(fecha_1)
+        return fechas_1
+    
+    def SegundasFechas():
+        for i in range(10):
+            hora_2 = random.randint(15, 22)
+            minutos = random.choice(variable)
+            mes = random.randint(1, 12)
+
+            if mes == 2:
+                dia = random.randint(1, 28)
+            elif mes in [1, 3, 5, 7, 8, 10, 12]:
+                dia = random.randint(1, 31)
+            else:
+                dia = random.randint(1, 30)
+            
+            fecha_2 = f"{dia}/{mes}    {hora_2:02}:{minutos:02}"
+            fechas_2.append(fecha_2)
+        return fechas_2
+
     especialidades = ['Cardiologia', 'Dermatologia', 'Cirugia General', 'Endocrinologia', 'Gastroenterologia',
                      'Ginecologia', 'Neumonologia', 'Neurocirugia', 'Oftalmologia', 'Pediatria',
                      'Psiquiatria', 'Traumatologia']
@@ -50,19 +67,37 @@ def DiccEspecialidades():
 
     dicc_especialidades = {}
 
-    for especialidad in especialidades:
-        if len(doctores) < 5:
-            break
-        
-        doctores_asignados = doctores[:5]
-        doctores = doctores[5:]
-        
-        if especialidad in especialidades_1:
-            dicc_doc = {doctor: fechas_1 for doctor in doctores_asignados}
-        elif especialidad in especialidades_2:
-            dicc_doc = {doctor: fechas_2 for doctor in doctores_asignados}
-        
-        dicc_especialidades[especialidad] = dicc_doc
+    with open('especialidades.json', 'w') as file:
+        file.write('{\n')
+
+        for i, especialidad in enumerate(especialidades):
+            if len(doctores) < 5:
+                break
+
+            doctores_asignados = doctores[:5]
+            doctores = doctores[5:]
+
+            if especialidad in especialidades_1:
+                fechas = PrimerasFechas()
+            elif especialidad in especialidades_2:
+                fechas = SegundasFechas()
+
+            file.write(f'  "{especialidad}": {{\n')
+
+            for doc_i, doctor in enumerate(doctores_asignados):
+                fechas_str = json.dumps(fechas)
+                file.write(f'    "{doctor}": {fechas_str}')
+                if doc_i < len(doctores_asignados) - 1:
+                    file.write(',\n')
+                else:
+                    file.write('\n')
+
+            if i < len(especialidades) - 1:
+                file.write('  },\n')
+            else:
+                file.write('  }\n')
+
+        file.write('}\n')
     
     return dicc_especialidades
 
@@ -99,7 +134,9 @@ def ImpresionTurno(especialidad_usuario, doctor_usuario, horario_usuario, usuari
     print()
 
 #Main
-especialidades = DiccEspecialidades()
+DiccEspecialidades()
+with open('especialidades.json', 'r') as file:
+    especialidades = json.load(file)
 usuario = DatosUsuario()
 especialidad = especialidades.keys()
 
