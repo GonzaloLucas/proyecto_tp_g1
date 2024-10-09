@@ -2,11 +2,10 @@ import random
 import json
 
 def DiccEspecialidades():
-    fechas_1 = []
-    fechas_2 = []
     variable = (0, 30)
     
     def PrimerasFechas():
+        fechas_1 = []
         for i in range(10):
             hora_1 = random.randint(7, 14)
             minutos = random.choice(variable)
@@ -23,6 +22,7 @@ def DiccEspecialidades():
         return fechas_1
     
     def SegundasFechas():
+        fechas_2 = []
         for i in range(10):
             hora_2 = random.randint(15, 22)
             minutos = random.choice(variable)
