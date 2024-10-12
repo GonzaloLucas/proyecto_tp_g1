@@ -2,49 +2,82 @@ import random
 import json
 
 def RegistrarUsuario():
-    mail_usuario = input("Ingrese su mail: ")
-    posicion = mail_usuario.find("@gmail.com")
     while True:
-        if posicion != -1:
-            pas_usuario = input("Ingrese su contraseña (debe ser alfanumérica y tener mínimo 8 caracteres): ")
-            if len(pas_usuario) >= 8 and pas_usuario.isalnum():
-                nombre_usuario = input("Ingrese su nombre de usuario (debe ser alfanumérico y tener mínimo 6 caracteres y sin espacios): ")
-                if nombre_usuario.isalnum() and len(nombre_usuario) >= 6 and " " not in nombre_usuario:
-                    try:
-                        nombres_usuarios = open("nombres_usuarios.txt", "a")
-                        nombres_usuarios.write(nombre_usuario + "\n")
-                    except OSError as mensaje:
-                        print("No se puede abrir el archivo: ", mensaje)
-                    finally:
-                        try:
-                            nombres_usuarios.close()
-                        except NameError:
-                            pass
-                    try:
-                        while True:
-                         nombres_usuarios = open("nombres_usuarios.txt", "r")
-                         if nombre_usuario in nombres_usuarios:
-                            print("El nombre de usuario ya existe, ingrese nuevamente.")
-                            nombre_usuario = input("Ingrese su nombre de usuario (debe ser alfanumérico, de 6 caracteres y sin espacios): ")
-                         else:
-                            break
-                    except FileNotFoundError as mensaje:
-                        print("No se puede abrir el archivo: ", mensaje)
-                    except OSError as mensaje:
-                        print("No se puede leer el archivo: ", mensaje)
-                    finally:
-                        try:
-                            nombres_usuarios.close()
-                        except NameError:
-                            pass
-                    with open(f"turnos_{nombre_usuario}.txt", "a") as file:
-                        turnos_usuario = file
-                    break
-            else:
-                print("Contraseña inválida, ingrese nuevamente.")
-        else:
+        mail_usuario = input("Ingrese su mail: ")
+        posicion = mail_usuario.find("@gmail.com")
+        
+        if posicion == -1:
             print("Mail inválido, ingrese nuevamente.")
-            mail_usuario = input("Ingrese su mail: ")
+            continue
+        
+        try:
+            ArchUsuario = open("usuarios.txt", "r")
+            mail_existe = False
+
+            for linea in ArchUsuario:
+                datos_usuario = linea.split(";")
+                if len(datos_usuario) > 0 and datos_usuario[0] == mail_usuario:
+                    mail_existe = True
+                    break
+
+            ArchUsuario.close()
+
+            if mail_existe:
+                print("Este mail ya está registrado. Ingrese un mail diferente.")
+                continue
+
+        except FileNotFoundError:
+            print("El archivo 'usuarios.txt' no existe, será creado.")
+            pass
+        except OSError as mensaje:
+            print("No se puede abrir el archivo: ", mensaje)
+            continue
+
+        pas_usuario = input("Ingrese su contraseña (debe ser alfanumérica y tener mínimo 8 caracteres): ")
+        if len(pas_usuario) >= 8 and pas_usuario.isalnum():
+            nombre_usuario = input("Ingrese su nombre de usuario (debe ser alfanumérico y tener mínimo 6 caracteres y sin espacios): ")
+            if nombre_usuario.isalnum() and len(nombre_usuario) >= 6 and " " not in nombre_usuario:
+                while True:
+                    nombre_existe = False
+                    try:
+                        nombres_usuarios = open("nombres_usuarios.txt", "r")
+                        
+                        for usuario in nombres_usuarios:
+                            if nombre_usuario.strip() == usuario.strip():
+                                nombre_existe = True
+                                break
+                        nombres_usuarios.close()
+
+                    except FileNotFoundError:
+                        print("El archivo 'nombres_usuarios.txt' no existe, se creará un nuevo archivo.")
+                        nombres_usuarios = open("nombres_usuarios.txt", "w")
+                        nombres_usuarios.close()
+
+                    if nombre_existe:
+                        print("El nombre de usuario ya existe, ingrese nuevamente.")
+                        nombre_usuario = input("Ingrese su nombre de usuario (debe ser alfanumérico, de 6 caracteres y sin espacios): ")
+                    else:
+                        try:
+                            nombres_usuarios = open("nombres_usuarios.txt", "a")
+                            nombres_usuarios.write(nombre_usuario + "\n")
+                            nombres_usuarios.close()
+                        except OSError as mensaje:
+                            print("No se puede abrir el archivo: ", mensaje)
+                        break
+
+                try:
+                    turnos_usuario = open(f"turnos_{nombre_usuario}.txt", "a")
+                except OSError as mensaje:
+                    print("No se puede abrir el archivo: ", mensaje)
+                finally:
+                    try:
+                        turnos_usuario.close()
+                    except NameError:
+                        pass
+                break
+        else:
+            print("Contraseña inválida, ingrese nuevamente.")
+
     def DatosUsuario():
         dni= input("Ingrese su DNI: ")
         while True:
@@ -65,7 +98,7 @@ def RegistrarUsuario():
     
     usuario = DatosUsuario()   
     try:
-        ArchUsuario =  open("usuarios.txt", "a")
+        ArchUsuario = open("usuarios.txt", "a")
         ArchUsuario.write(mail_usuario + ";" + pas_usuario + ";" + nombre_usuario + ";" + usuario[0] + ";" + usuario[1] + ";" + usuario[2] + ";" + usuario[3] + "\n")
     except OSError as mensaje:
         print("No se puede abrir el archivo: ", mensaje)
