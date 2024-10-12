@@ -1,6 +1,83 @@
 import random
 import json
 
+def RegistrarUsuario():
+    mail_usuario = input("Ingrese su mail: ")
+    posicion = mail_usuario.find("@gmail.com")
+    while True:
+        if posicion != -1:
+            pas_usuario = input("Ingrese su contraseña (debe ser alfanumérica y tener mínimo 8 caracteres): ")
+            if len(pas_usuario) >= 8 and pas_usuario.isalnum():
+                nombre_usuario = input("Ingrese su nombre de usuario (debe ser alfanumérico, de 6 caracteres y sin espacios): ")
+                if nombre_usuario.isalnum() and len(nombre_usuario) == 6 and " " not in nombre_usuario:
+                    try:
+                        nombres_usuarios = open("nombres_usuarios.txt", "w")
+                        nombres_usuarios.write(nombre_usuario + "\n")
+                    except OSError as mensaje:
+                        print("No se puede abrir el archivo: ", mensaje)
+                    finally:
+                        try:
+                            nombres_usuarios.close()
+                        except NameError:
+                            pass
+                    try:
+                        while True:
+                         nombres_usuarios = open("nombres_usuarios.txt", "r")
+                         if nombre_usuario in nombres_usuarios:
+                            print("El nombre de usuario ya existe, ingrese nuevamente.")
+                            nombre_usuario = input("Ingrese su nombre de usuario (debe ser alfanumérico, de 6 caracteres y sin espacios): ")
+                         else:
+                            break
+                    except FileNotFoundError as mensaje:
+                        print("No se puede abrir el archivo: ", mensaje)
+                    except OSError as mensaje:
+                        print("No se puede leer el archivo: ", mensaje)
+                    finally:
+                        try:
+                            nombres_usuarios.close()
+                        except NameError:
+                            pass
+
+                    with open(f"turnos_{nombre_usuario}.txt", "w") as file:
+                        turnos_usuario = file
+                    break
+            else:
+                print("Contraseña inválida, ingrese nuevamente.")
+
+        else:
+            print("Mail inválido, ingrese nuevamente.")
+            mail_usuario = input("Ingrese su mail: ")
+    def DatosUsuario():
+        dni= input("Ingrese su DNI: ")
+        while True:
+            if dni.isdigit() == True and len(dni) == 8:
+                break
+            else:
+                print("El numero de dni fue ingresado de forma erronea")
+                dni= input("Ingrese su DNI: ")
+        nombre = input("Ingrese su nombre/s: ")
+        apellido = input("Ingrese su apellido/s: ")
+        obra_social = input("Ingrese su Obra Social: ")
+        dic = []
+        dic.append(nombre.title())
+        dic.append(apellido.title())
+        dic.append(dni)
+        dic.append(obra_social.title())
+        return dic
+    
+    usuario = DatosUsuario()   
+    try:
+        ArchUsuario =  open("usuarios.txt", "w")
+        ArchUsuario.write(mail_usuario + ";" + pas_usuario + ";" + nombre_usuario + ";" + usuario[0] + ";" + usuario[1] + ";" + usuario[2] + ";" + usuario[3] + "\n")
+    except OSError as mensaje:
+        print("No se puede abrir el archivo: ", mensaje)
+    finally:
+        try:
+            ArchUsuario.close()
+        except NameError:
+            pass
+    return ArchUsuario, turnos_usuario, usuario
+
 def DiccEspecialidades():
     variable = (0, 30)
     
@@ -102,24 +179,6 @@ def DiccEspecialidades():
     return dicc_especialidades
 
 
-def DatosUsuario():
-    dni= input("Ingrese su DNI: ")
-    while True:
-        if dni.isdigit() == True and len(dni) == 8:
-            break
-        else:
-            print("El numero de dni fue ingresado de forma erronea")
-            dni= input("Ingrese su DNI: ")
-    nombre = input("Ingrese su nombre/s: ")
-    apellido = input("Ingrese su apellido/s: ")
-    obra_social = input("Ingrese su Obra Social: ")
-    dic = []
-    dic.append(nombre.title())
-    dic.append(apellido.title())
-    dic.append(dni)
-    dic.append(obra_social.title())
-    return dic
-
 def ImpresionTurno(especialidad_usuario, doctor_usuario, horario_usuario, usuario):
     print("-"*63)
     print("Reserva de turno".center(40))
@@ -134,13 +193,35 @@ def ImpresionTurno(especialidad_usuario, doctor_usuario, horario_usuario, usuari
     print()
 
 #Main
+print("Bienvenido/a A Nuestro Sistema de Reserva de Turnos Médicos, Que desea hacer?")
+primer_menu = ["Registrarse", "Iniciar Sesión"]
+lista_complementaria_primer_menu = [i+1 for i in range(len(primer_menu))]
+print("\n" + "=" * 40 + "\n")
+print("Sistema de reserva de turnos médicos")
+print("-" * 40)
+for i in range(len(primer_menu)):
+    print(f"{lista_complementaria_primer_menu[i]} {primer_menu[i]}")
+            
+print("\n" + "=" * 40 + "\n")
+print()
+while True:
+    try:
+        desicion = int(input("Ingrese el número correspondiente a lo que desee: "))
+        if 1 <= desicion <= len(lista_complementaria_primer_menu):
+            turno_usuario = primer_menu[desicion - 1]
+            print(f"Has seleccionado: {turno_usuario}")
+            if turno_usuario == "Registrarse":
+                ArchUsuario, turnos_usuario, usuario = RegistrarUsuario()
+            break
+        else:
+            print("Valor fuera de rango. Por favor, ingrese un número válido.")
+    except ValueError:
+        print("Entrada no válida. Por favor, ingrese un número.")
+
 DiccEspecialidades()
 with open('especialidades.json', 'r') as file:
     especialidades = json.load(file)
-usuario = DatosUsuario()
 especialidad = especialidades.keys()
-
-
 lista_especialidad = list(especialidad)
 lista_complementaria_especialidad = [i+1 for i in range(len(lista_especialidad))]
 especialidad_usuario = 0
