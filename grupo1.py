@@ -8,10 +8,10 @@ def RegistrarUsuario():
         if posicion != -1:
             pas_usuario = input("Ingrese su contraseña (debe ser alfanumérica y tener mínimo 8 caracteres): ")
             if len(pas_usuario) >= 8 and pas_usuario.isalnum():
-                nombre_usuario = input("Ingrese su nombre de usuario (debe ser alfanumérico, de 6 caracteres y sin espacios): ")
-                if nombre_usuario.isalnum() and len(nombre_usuario) == 6 and " " not in nombre_usuario:
+                nombre_usuario = input("Ingrese su nombre de usuario (debe ser alfanumérico y tener mínimo 6 caracteres y sin espacios): ")
+                if nombre_usuario.isalnum() and len(nombre_usuario) >= 6 and " " not in nombre_usuario:
                     try:
-                        nombres_usuarios = open("nombres_usuarios.txt", "w")
+                        nombres_usuarios = open("nombres_usuarios.txt", "a")
                         nombres_usuarios.write(nombre_usuario + "\n")
                     except OSError as mensaje:
                         print("No se puede abrir el archivo: ", mensaje)
@@ -37,13 +37,11 @@ def RegistrarUsuario():
                             nombres_usuarios.close()
                         except NameError:
                             pass
-
-                    with open(f"turnos_{nombre_usuario}.txt", "w") as file:
+                    with open(f"turnos_{nombre_usuario}.txt", "a") as file:
                         turnos_usuario = file
                     break
             else:
                 print("Contraseña inválida, ingrese nuevamente.")
-
         else:
             print("Mail inválido, ingrese nuevamente.")
             mail_usuario = input("Ingrese su mail: ")
@@ -67,7 +65,7 @@ def RegistrarUsuario():
     
     usuario = DatosUsuario()   
     try:
-        ArchUsuario =  open("usuarios.txt", "w")
+        ArchUsuario =  open("usuarios.txt", "a")
         ArchUsuario.write(mail_usuario + ";" + pas_usuario + ";" + nombre_usuario + ";" + usuario[0] + ";" + usuario[1] + ";" + usuario[2] + ";" + usuario[3] + "\n")
     except OSError as mensaje:
         print("No se puede abrir el archivo: ", mensaje)
@@ -142,9 +140,10 @@ def DiccEspecialidades():
     especialidades_2 = ['Neumonologia', 'Neurocirugia', 'Oftalmologia', 'Pediatria',
                      'Psiquiatria', 'Traumatologia']
 
-    try:
-        especialidades = open('especialidades.json', 'w')
-        especialidades.write('{\n')
+    dicc_especialidades = {}
+
+    with open('especialidades.json', 'w') as file:
+        file.write('{\n')
 
         for i, especialidad in enumerate(especialidades):
             if len(doctores) < 5:
@@ -158,31 +157,24 @@ def DiccEspecialidades():
             elif especialidad in especialidades_2:
                 fechas = SegundasFechas()
 
-            especialidades.write(f'  "{especialidad}": {{\n')
+            file.write(f'  "{especialidad}": {{\n')
 
             for doc_i, doctor in enumerate(doctores_asignados):
                 fechas_str = json.dumps(fechas)
-                especialidades.write(f'    "{doctor}": {fechas_str}')
+                file.write(f'    "{doctor}": {fechas_str}')
                 if doc_i < len(doctores_asignados) - 1:
-                    especialidades.write(',\n')
+                    file.write(',\n')
                 else:
-                    especialidades.write('\n')
+                    file.write('\n')
 
             if i < len(especialidades) - 1:
-                especialidades.write('  },\n')
+                file.write('  },\n')
             else:
-                especialidades.write('  }\n')
+                file.write('  }\n')
 
-        especialidades.write('}\n')
-    except (FileNotFoundError, OSError) as error:
-        print("ERROR DE GRABACION: ", error)
-    finally:
-        try:
-            especialidades.close()
-        except NameError:
-            pass
-        
-    return especialidades
+        file.write('}\n')
+    
+    return dicc_especialidades
 
 
 def ImpresionTurno(especialidad_usuario, doctor_usuario, horario_usuario, usuario):
@@ -225,6 +217,11 @@ while True:
         print("Entrada no válida. Por favor, ingrese un número.")
 
 DiccEspecialidades()
+with open('especialidades.json', 'r') as file:
+    especialidades = json.load(file)
+especialidad = especialidades.keys()
+lista_especialidad = list(especialidad)
+lista_complementaria_especialidad = [i+1 for i in range(len(lista_especialidad))]
 especialidad_usuario = 0
 doctor = 0
 lista_doctor = 0
@@ -235,93 +232,81 @@ lista_horario = 0
 lista_complementaria_horario = 0
 horario_usuario = 0
 decision = input("Desea reservar un turno? (y/n): ")
-try:
-    especialidades = open('especialidades.json', 'r')
-    especialidades = json.load(especialidades)
-    especialidad = especialidades.keys()
-    lista_especialidad = list(especialidad)
-    lista_complementaria_especialidad = [i+1 for i in range(len(lista_especialidad))]
-    matriz_especialidad = [[lista_complementaria_especialidad[i], lista_especialidad[i]] for i in range(len(lista_especialidad))]
-    while True:
-        if decision == "y":
-            print("\n" + "=" * 40 + "\n")
-            print("Especialidades")
-            print("-" * 40)
-            for i in range(len(lista_especialidad)):
-                print(f"{lista_complementaria_especialidad[i]} {lista_especialidad[i]}")
+matriz_especialidad = [[lista_complementaria_especialidad[i], lista_especialidad[i]] for i in range(len(lista_especialidad))]
+
+while True:
+    if decision == "y":
+        print("\n" + "=" * 40 + "\n")
+        print("Especialidades")
+        print("-" * 40)
+        for i in range(len(lista_especialidad)):
+            print(f"{lista_complementaria_especialidad[i]} {lista_especialidad[i]}")
             
-            print("\n" + "=" * 40 + "\n")
-            print()
+        print("\n" + "=" * 40 + "\n")
+        print()
         
-            while True:
-                try:
-                    desicion1 = int(input("Ingrese el número correspondiente a la especialidad que desee: "))
-                    if 1 <= desicion1 <= len(matriz_especialidad):
-                        especialidad_usuario = lista_especialidad[desicion1 - 1]
-                        print(f"Has seleccionado: {especialidad_usuario}")
-                        break
-                    else:
-                        print("Valor fuera de rango. Por favor, ingrese un número válido.")
-                except ValueError:
-                    print("Entrada no válida. Por favor, ingrese un número.")
+        while True:
+            try:
+                desicion1 = int(input("Ingrese el número correspondiente a la especialidad que desee: "))
+                if 1 <= desicion1 <= len(matriz_especialidad):
+                    especialidad_usuario = lista_especialidad[desicion1 - 1]
+                    print(f"Has seleccionado: {especialidad_usuario}")
+                    break
+                else:
+                    print("Valor fuera de rango. Por favor, ingrese un número válido.")
+            except ValueError:
+                print("Entrada no válida. Por favor, ingrese un número.")
 
 
-            doctor = especialidades.get(especialidad_usuario)
-            lista_doctor = list(doctor)
-            lista_complementaria_doctor = [i+1 for i in range(len(lista_doctor))]
-            matriz_doctor = [[lista_complementaria_doctor[i], lista_doctor[i]] for i in range(len(lista_doctor))]
-            print("\n" + "=" * 40 + "\n")
-            print(f"Doctores correspondiente a la especialidad: {especialidad_usuario}")
-            print("-" * 40)
-            for i in range(len(lista_doctor)):
-                print(f"{lista_complementaria_doctor[i]} {lista_doctor[i]}")
-            print("\n" + "=" * 40 + "\n")
-            print()
+        doctor = especialidades.get(especialidad_usuario)
+        lista_doctor = list(doctor)
+        lista_complementaria_doctor = [i+1 for i in range(len(lista_doctor))]
+        matriz_doctor = [[lista_complementaria_doctor[i], lista_doctor[i]] for i in range(len(lista_doctor))]
+        print("\n" + "=" * 40 + "\n")
+        print(f"Doctores correspondiente a la especialidad: {especialidad_usuario}")
+        print("-" * 40)
+        for i in range(len(lista_doctor)):
+            print(f"{lista_complementaria_doctor[i]} {lista_doctor[i]}")
+        print("\n" + "=" * 40 + "\n")
+        print()
 
-            while True:
-                try:
-                    desicion2 = int(input("Ingrese el número correspondiente al doctor que desee: "))
-                    if 1 <= desicion2 <= len(matriz_doctor):
-                        doctor_usuario = lista_doctor[desicion2 - 1]
-                        print(f"Has seleccionado: {doctor_usuario}")
-                        break
-                    else:
-                        print("Valor fuera de rango. Por favor, ingrese un número válido.")
-                except ValueError:
-                    print("Entrada no válida. Por favor, ingrese un número.")
+        while True:
+            try:
+                desicion2 = int(input("Ingrese el número correspondiente al doctor que desee: "))
+                if 1 <= desicion2 <= len(matriz_doctor):
+                    doctor_usuario = lista_doctor[desicion2 - 1]
+                    print(f"Has seleccionado: {doctor_usuario}")
+                    break
+                else:
+                    print("Valor fuera de rango. Por favor, ingrese un número válido.")
+            except ValueError:
+                print("Entrada no válida. Por favor, ingrese un número.")
 
-            horario = doctor.get(doctor_usuario)
-            lista_horario = list(horario)
-            lista_complementaria_horario = [i+1 for i in range(len(lista_horario))]
-            matriz_horario = [[lista_complementaria_horario[i], lista_horario[i]] for i in range(len(lista_horario))]
-            print("\n" + "=" * 40 + "\n")
-            print(f"Horarios correspondientes al Dr/Dra: {doctor_usuario}")
-            print("-" * 40)
-            for i in range(len(lista_horario)):
-                print(f"{lista_complementaria_horario[i]} {lista_horario[i]}")
-            print("\n" + "=" * 40 + "\n")
-            print()
+        horario = doctor.get(doctor_usuario)
+        lista_horario = list(horario)
+        lista_complementaria_horario = [i+1 for i in range(len(lista_horario))]
+        matriz_horario = [[lista_complementaria_horario[i], lista_horario[i]] for i in range(len(lista_horario))]
+        print("\n" + "=" * 40 + "\n")
+        print(f"Horarios correspondientes al Dr/Dra: {doctor_usuario}")
+        print("-" * 40)
+        for i in range(len(lista_horario)):
+            print(f"{lista_complementaria_horario[i]} {lista_horario[i]}")
+        print("\n" + "=" * 40 + "\n")
+        print()
 
-            while True:
-                try:
-                    desicion3 = int(input("Ingrese el número correspondiente a la especialidad que desee: "))
-                    if 1 <= desicion3 <= len(matriz_horario):
-                        horario_usuario = lista_horario[desicion3 - 1]
-                        print(f"Has seleccionado: {horario_usuario}")
-                        break
-                    else:
-                        print("Valor fuera de rango. Por favor, ingrese un número válido.")
-                except ValueError:
-                    print("Entrada no válida. Por favor, ingrese un número.")
+        while True:
+            try:
+                desicion3 = int(input("Ingrese el número correspondiente a la especialidad que desee: "))
+                if 1 <= desicion3 <= len(matriz_horario):
+                    horario_usuario = lista_horario[desicion3 - 1]
+                    print(f"Has seleccionado: {horario_usuario}")
+                    break
+                else:
+                    print("Valor fuera de rango. Por favor, ingrese un número válido.")
+            except ValueError:
+                print("Entrada no válida. Por favor, ingrese un número.")
 
-            ImpresionTurno(especialidad_usuario, doctor_usuario, horario_usuario, usuario)
-            break
-        else:
-            break
-except (FileNotFoundError, OSError) as error:
-    print("ERROR DE LECTURA: ", error)
-finally:
-    try:
-        especialidades.close()
-    except NameError:
-        pass
+        ImpresionTurno(especialidad_usuario, doctor_usuario, horario_usuario, usuario)
+        break
+    else:
+        break
