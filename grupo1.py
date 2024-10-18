@@ -109,6 +109,64 @@ def RegistrarUsuario():
             pass
     return ArchUsuario, turnos_usuario, usuario
 
+def IniciarSesion():
+    while True:
+        mail_usuario = input("Ingrese su mail: ")
+        posicion = mail_usuario.find("@gmail.com")
+        
+        if posicion == -1:
+            print("Mail inválido, ingrese nuevamente.")
+            continue
+
+        try:
+            ArchUsuario = open("usuarios.txt", "r")
+            mail_existe = False
+
+            for linea in ArchUsuario:
+                datos_usuario = linea.split(";")
+                if len(datos_usuario) > 0 and datos_usuario[0] == mail_usuario:
+                    mail_existe = True
+                    if mail_existe:
+                        pas_usuario = input("Ingrese su contraseña (debe ser alfanumérica y tener mínimo 8 caracteres): ")
+                        pas_existe  = False
+                        for linea in ArchUsuario:
+                            datos_usuario = linea.split(";")
+                            if len(datos_usuario) > 0 and datos_usuario[1] == pas_usuario:
+                                pas_existe = True
+                                if pas_existe:
+                                    nombre_usuario = input("Ingrese su nombre de usuario (debe ser alfanumérico y tener mínimo 6 caracteres y sin espacios): ")
+                                    nombre_existe = False
+
+                                    for linea in ArchUsuario:
+                                        datos_usuario = linea.split(";")
+                                        if len(datos_usuario) > 0 and datos_usuario[2] == nombre_usuario:
+                                            nombre_existe = True
+                                    
+                                            if nombre_existe:
+                                                try:
+                                                    turnos_usuario = open(f"turnos_{nombre_usuario}.txt", "a")
+                                                except (OSError, NameError) as mensaje:
+                                                    print("No se puede abrir el archivo: ", mensaje)
+                                                break
+
+        except OSError as mensaje:
+            print("No se puede abrir el archivo: ", mensaje)
+        finally:
+            try:
+                ArchUsuario.close()
+            except NameError:
+                pass
+            
+
+
+        ArchUsuario.close()
+
+
+
+
+
+
+
 def DiccEspecialidades():
     variable = (0, 30)
     
