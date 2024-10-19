@@ -298,14 +298,14 @@ def PrimerMenu():
 
                 if turno_usuario == "Iniciar Sesión":
                     nombre_usuario, usuario = IniciarSesion()
-                    SegundoMenu()
+                    SegundoMenu(usuario)
                 break
             else:
                 print("Valor fuera de rango. Por favor, ingrese un número válido.")
         except ValueError:
             print("Entrada no válida. Por favor, ingrese un número.")
 
-def SegundoMenu():
+def SegundoMenu(usuario):
     DiccEspecialidades()
     try:
         especialidades_arch = open('especialidades.json', 'r')
