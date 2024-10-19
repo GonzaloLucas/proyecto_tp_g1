@@ -100,6 +100,7 @@ def RegistrarUsuario():
     try:
         ArchUsuario = open("usuarios.txt", "a")
         ArchUsuario.write(mail_usuario + ";" + pas_usuario + ";" + nombre_usuario + ";" + usuario[0] + ";" + usuario[1] + ";" + usuario[2] + ";" + usuario[3] + "\n")
+        print("Se Registro el usuario con éxito")
     except OSError as mensaje:
         print("No se puede abrir el archivo: ", mensaje)
     finally:
@@ -107,7 +108,6 @@ def RegistrarUsuario():
             ArchUsuario.close()
         except NameError:
             pass
-    return ArchUsuario, turnos_usuario, usuario
 
 def IniciarSesion():
     while True:
@@ -129,26 +129,17 @@ def IniciarSesion():
                     if mail_existe:
                         pas_usuario = input("Ingrese su contraseña (debe ser alfanumérica y tener mínimo 8 caracteres): ")
                         pas_existe  = False
-                        for linea in ArchUsuario:
-                            datos_usuario = linea.split(";")
-                            if len(datos_usuario) > 0 and datos_usuario[1] == pas_usuario:
-                                pas_existe = True
-                                if pas_existe:
-                                    nombre_usuario = input("Ingrese su nombre de usuario (debe ser alfanumérico y tener mínimo 6 caracteres y sin espacios): ")
-                                    nombre_existe = False
-
-                                    for linea in ArchUsuario:
-                                        datos_usuario = linea.split(";")
-                                        if len(datos_usuario) > 0 and datos_usuario[2] == nombre_usuario:
-                                            nombre_existe = True
-                                    
-                                            if nombre_existe:
-                                                try:
-                                                    turnos_usuario = open(f"turnos_{nombre_usuario}.txt", "a")
-                                                except (OSError, NameError) as mensaje:
-                                                    print("No se puede abrir el archivo: ", mensaje)
-                                                break
-
+                        if len(datos_usuario) > 0 and datos_usuario[1] == pas_usuario:
+                            pas_existe = True
+                            if pas_existe:
+                                nombre_usuario = input("Ingrese su nombre de usuario (debe ser alfanumérico y tener mínimo 6 caracteres y sin espacios): ")
+                                nombre_existe = False
+                                if len(datos_usuario) > 0 and datos_usuario[2] == nombre_usuario:
+                                    nombre_existe = True
+                                    if nombre_existe:
+                                        print("Se a iniciado sesión con éxito")
+                                        dato = datos_usuario[3:7]
+                                        return nombre_usuario, dato
         except OSError as mensaje:
             print("No se puede abrir el archivo: ", mensaje)
         finally:
@@ -156,16 +147,6 @@ def IniciarSesion():
                 ArchUsuario.close()
             except NameError:
                 pass
-            
-
-
-        ArchUsuario.close()
-
-
-
-
-
-
 
 def DiccEspecialidades():
     variable = (0, 30)
@@ -290,131 +271,143 @@ def ImpresionTurno(especialidad_usuario, doctor_usuario, horario_usuario, usuari
     print("-"*63)
     print()
 
+def PrimerMenu():
+    primer_menu = ["Registrarse", "Iniciar Sesión"]
+    lista_complementaria_primer_menu = [i+1 for i in range(len(primer_menu))]
+    print("\n" + "=" * 40 + "\n")
+    print("Sistema de reserva de turnos médicos")
+    print("-" * 40)
+    for i in range(len(primer_menu)):
+        print(f"{lista_complementaria_primer_menu[i]} {primer_menu[i]}")
+            
+    print("\n" + "=" * 40 + "\n")
+    print()
+    while True:
+        try:
+            desicion = int(input("Ingrese el número correspondiente a lo que desee: "))
+            if 1 <= desicion <= len(lista_complementaria_primer_menu):
+                turno_usuario = primer_menu[desicion - 1]
+                print(f"Has seleccionado: {turno_usuario}")
+                if turno_usuario == "Registrarse":
+                    RegistrarUsuario()
+                    decision_recursiva= ("desea volver al menu principal? (y/n): ")
+                    if decision_recursiva == "y":
+                        PrimerMenu()
+                    else:
+                        continue
+
+                if turno_usuario == "Iniciar Sesión":
+                    nombre_usuario, usuario = IniciarSesion()
+                    SegundoMenu()
+                break
+            else:
+                print("Valor fuera de rango. Por favor, ingrese un número válido.")
+        except ValueError:
+            print("Entrada no válida. Por favor, ingrese un número.")
+
+def SegundoMenu():
+    DiccEspecialidades()
+    try:
+        especialidades_arch = open('especialidades.json', 'r')
+        especialidades = json.load(especialidades_arch)
+        especialidad = especialidades.keys()
+        lista_especialidad = list(especialidad)
+        lista_complementaria_especialidad = [i+1 for i in range(len(lista_especialidad))]
+        especialidad_usuario = 0
+        doctor = 0
+        lista_doctor = 0
+        lista_complementaria_doctor = 0
+        doctor_usuario = 0
+        horario = 0
+        lista_horario = 0
+        lista_complementaria_horario = 0
+        horario_usuario = 0
+        decision = input("Desea reservar un turno? (y/n): ")
+        matriz_especialidad = [[lista_complementaria_especialidad[i], lista_especialidad[i]] for i in range(len(lista_especialidad))]
+
+        while True:
+            if decision == "y":
+                print("\n" + "=" * 40 + "\n")
+                print("Especialidades")
+                print("-" * 40)
+                for i in range(len(lista_especialidad)):
+                    print(f"{lista_complementaria_especialidad[i]} {lista_especialidad[i]}")
+            
+                print("\n" + "=" * 40 + "\n")
+                print()
+        
+                while True:
+                    try:
+                        desicion1 = int(input("Ingrese el número correspondiente a la especialidad que desee: "))
+                        if 1 <= desicion1 <= len(matriz_especialidad):
+                            especialidad_usuario = lista_especialidad[desicion1 - 1]
+                            print(f"Has seleccionado: {especialidad_usuario}")
+                            break
+                        else:
+                            print("Valor fuera de rango. Por favor, ingrese un número válido.")
+                    except ValueError:
+                        print("Entrada no válida. Por favor, ingrese un número.")
+
+
+                doctor = especialidades.get(especialidad_usuario)
+                lista_doctor = list(doctor)
+                lista_complementaria_doctor = [i+1 for i in range(len(lista_doctor))]
+                matriz_doctor = [[lista_complementaria_doctor[i], lista_doctor[i]] for i in range(len(lista_doctor))]
+                print("\n" + "=" * 40 + "\n")
+                print(f"Doctores correspondiente a la especialidad: {especialidad_usuario}")
+                print("-" * 40)
+                for i in range(len(lista_doctor)):
+                    print(f"{lista_complementaria_doctor[i]} {lista_doctor[i]}")
+                print("\n" + "=" * 40 + "\n")
+                print()
+
+                while True:
+                    try:
+                        desicion2 = int(input("Ingrese el número correspondiente al doctor que desee: "))
+                        if 1 <= desicion2 <= len(matriz_doctor):
+                            doctor_usuario = lista_doctor[desicion2 - 1]
+                            print(f"Has seleccionado: {doctor_usuario}")
+                            break
+                        else:
+                            print("Valor fuera de rango. Por favor, ingrese un número válido.")
+                    except ValueError:
+                        print("Entrada no válida. Por favor, ingrese un número.")
+
+                horario = doctor.get(doctor_usuario)
+                lista_horario = list(horario)
+                lista_complementaria_horario = [i+1 for i in range(len(lista_horario))]
+                matriz_horario = [[lista_complementaria_horario[i], lista_horario[i]] for i in range(len(lista_horario))]
+                print("\n" + "=" * 40 + "\n")
+                print(f"Horarios correspondientes al Dr/Dra: {doctor_usuario}")
+                print("-" * 40)
+                for i in range(len(lista_horario)):
+                    print(f"{lista_complementaria_horario[i]} {lista_horario[i]}")
+                print("\n" + "=" * 40 + "\n")
+                print()
+
+                while True:
+                    try:
+                        desicion3 = int(input("Ingrese el número correspondiente a la especialidad que desee: "))
+                        if 1 <= desicion3 <= len(matriz_horario):
+                            horario_usuario = lista_horario[desicion3 - 1]
+                            print(f"Has seleccionado: {horario_usuario}")
+                            break
+                        else:
+                            print("Valor fuera de rango. Por favor, ingrese un número válido.")
+                    except ValueError:
+                        print("Entrada no válida. Por favor, ingrese un número.")
+
+                ImpresionTurno(especialidad_usuario, doctor_usuario, horario_usuario, usuario)
+                break
+            else:
+                break
+    except (FileNotFoundError, OSError) as error:
+        print("Error de lectura: ", error)
+    finally:
+        try:
+            especialidades_arch.close()
+        except NameError:
+            pass
 #Main
 print("Bienvenido/a A Nuestro Sistema de Reserva de Turnos Médicos, Que desea hacer?")
-primer_menu = ["Registrarse", "Iniciar Sesión"]
-lista_complementaria_primer_menu = [i+1 for i in range(len(primer_menu))]
-print("\n" + "=" * 40 + "\n")
-print("Sistema de reserva de turnos médicos")
-print("-" * 40)
-for i in range(len(primer_menu)):
-    print(f"{lista_complementaria_primer_menu[i]} {primer_menu[i]}")
-            
-print("\n" + "=" * 40 + "\n")
-print()
-while True:
-    try:
-        desicion = int(input("Ingrese el número correspondiente a lo que desee: "))
-        if 1 <= desicion <= len(lista_complementaria_primer_menu):
-            turno_usuario = primer_menu[desicion - 1]
-            print(f"Has seleccionado: {turno_usuario}")
-            if turno_usuario == "Registrarse":
-                ArchUsuario, turnos_usuario, usuario = RegistrarUsuario()
-            break
-        else:
-            print("Valor fuera de rango. Por favor, ingrese un número válido.")
-    except ValueError:
-        print("Entrada no válida. Por favor, ingrese un número.")
-
-DiccEspecialidades()
-try:
-    especialidades_arch = open('especialidades.json', 'r')
-    especialidades = json.load(especialidades_arch)
-    especialidad = especialidades.keys()
-    lista_especialidad = list(especialidad)
-    lista_complementaria_especialidad = [i+1 for i in range(len(lista_especialidad))]
-    especialidad_usuario = 0
-    doctor = 0
-    lista_doctor = 0
-    lista_complementaria_doctor = 0
-    doctor_usuario = 0
-    horario = 0
-    lista_horario = 0
-    lista_complementaria_horario = 0
-    horario_usuario = 0
-    decision = input("Desea reservar un turno? (y/n): ")
-    matriz_especialidad = [[lista_complementaria_especialidad[i], lista_especialidad[i]] for i in range(len(lista_especialidad))]
-
-    while True:
-        if decision == "y":
-            print("\n" + "=" * 40 + "\n")
-            print("Especialidades")
-            print("-" * 40)
-            for i in range(len(lista_especialidad)):
-                print(f"{lista_complementaria_especialidad[i]} {lista_especialidad[i]}")
-            
-            print("\n" + "=" * 40 + "\n")
-            print()
-        
-            while True:
-                try:
-                    desicion1 = int(input("Ingrese el número correspondiente a la especialidad que desee: "))
-                    if 1 <= desicion1 <= len(matriz_especialidad):
-                        especialidad_usuario = lista_especialidad[desicion1 - 1]
-                        print(f"Has seleccionado: {especialidad_usuario}")
-                        break
-                    else:
-                        print("Valor fuera de rango. Por favor, ingrese un número válido.")
-                except ValueError:
-                    print("Entrada no válida. Por favor, ingrese un número.")
-
-
-            doctor = especialidades.get(especialidad_usuario)
-            lista_doctor = list(doctor)
-            lista_complementaria_doctor = [i+1 for i in range(len(lista_doctor))]
-            matriz_doctor = [[lista_complementaria_doctor[i], lista_doctor[i]] for i in range(len(lista_doctor))]
-            print("\n" + "=" * 40 + "\n")
-            print(f"Doctores correspondiente a la especialidad: {especialidad_usuario}")
-            print("-" * 40)
-            for i in range(len(lista_doctor)):
-                print(f"{lista_complementaria_doctor[i]} {lista_doctor[i]}")
-            print("\n" + "=" * 40 + "\n")
-            print()
-
-            while True:
-                try:
-                    desicion2 = int(input("Ingrese el número correspondiente al doctor que desee: "))
-                    if 1 <= desicion2 <= len(matriz_doctor):
-                        doctor_usuario = lista_doctor[desicion2 - 1]
-                        print(f"Has seleccionado: {doctor_usuario}")
-                        break
-                    else:
-                        print("Valor fuera de rango. Por favor, ingrese un número válido.")
-                except ValueError:
-                    print("Entrada no válida. Por favor, ingrese un número.")
-
-            horario = doctor.get(doctor_usuario)
-            lista_horario = list(horario)
-            lista_complementaria_horario = [i+1 for i in range(len(lista_horario))]
-            matriz_horario = [[lista_complementaria_horario[i], lista_horario[i]] for i in range(len(lista_horario))]
-            print("\n" + "=" * 40 + "\n")
-            print(f"Horarios correspondientes al Dr/Dra: {doctor_usuario}")
-            print("-" * 40)
-            for i in range(len(lista_horario)):
-                print(f"{lista_complementaria_horario[i]} {lista_horario[i]}")
-            print("\n" + "=" * 40 + "\n")
-            print()
-
-            while True:
-                try:
-                    desicion3 = int(input("Ingrese el número correspondiente a la especialidad que desee: "))
-                    if 1 <= desicion3 <= len(matriz_horario):
-                        horario_usuario = lista_horario[desicion3 - 1]
-                        print(f"Has seleccionado: {horario_usuario}")
-                        break
-                    else:
-                        print("Valor fuera de rango. Por favor, ingrese un número válido.")
-                except ValueError:
-                    print("Entrada no válida. Por favor, ingrese un número.")
-
-            ImpresionTurno(especialidad_usuario, doctor_usuario, horario_usuario, usuario)
-            break
-        else:
-            break
-except (FileNotFoundError, OSError) as error:
-    print("Error de lectura: ", error)
-finally:
-    try:
-        especialidades_arch.close()
-    except NameError:
-        pass
+PrimerMenu()
