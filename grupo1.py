@@ -328,7 +328,6 @@ def SegundoMenu(nombre_usuario, usuario, decision_nose):
             lista_horario = 0
             lista_complementaria_horario = 0
             horario_usuario = 0
-            horario_existe = False
             matriz_especialidad = [[lista_complementaria_especialidad[i], lista_especialidad[i]] for i in range(len(lista_especialidad))]
 
             while True:
@@ -395,16 +394,8 @@ def SegundoMenu(nombre_usuario, usuario, decision_nose):
                         try:
                             desicion3 = int(input("Ingrese el número correspondiente al horario que desee: "))
                             if 1 <= desicion3 <= len(matriz_horario):
-                                for linea in turnos_usuario:
-                                    datos_nya = linea.split(";")
-                                    if len(datos_nya) > 0 and datos_nya[2]:
-                                        horario_existe = True
-                                        if horario_existe:
-                                            print("usted selecciono un horario de un turno ya establecido, por favor seleccione otro")
-                                            continue
-                                        else:
-                                            horario_usuario = lista_horario[desicion3 - 1]
-                                            print(f"Has seleccionado: {horario_usuario}")
+                                horario_usuario = lista_horario[desicion3 - 1]
+                                print(f"Has seleccionado: {horario_usuario}")
                                 break
                             else:
                                 print("Valor fuera de rango. Por favor, ingrese un número válido.")
@@ -412,9 +403,6 @@ def SegundoMenu(nombre_usuario, usuario, decision_nose):
                             print("Entrada no válida. Por favor, ingrese un número.")
 
                     turnos_usuario.write(especialidad_usuario + ";" + doctor_usuario + ";" + horario_usuario + ";" + usuario[0] + ";" + usuario[1] + ";" + usuario[2] + ";" + usuario[3] + "\n")
-                    decision_lol = int("desea visualizar el turno reservado? (y/n): ")
-                    if decision_lol == "y":
-                        ImpresionTurno(especialidad_usuario, doctor_usuario, horario_usuario, usuario)
                     
                     menu_nya = ["Volver al menu principal", "Reservar un turno nuevo", "Dar de baja un turno", "Finalizar"]
                     lista_complementaria_menu_nya = [i+1 for i in range(len(menu_nya))]
@@ -436,14 +424,13 @@ def SegundoMenu(nombre_usuario, usuario, decision_nose):
                                     PrimerMenu()
 
                                 if usuario_nya == "Reservar un turno nuevo":
-                                    SegundoMenu(nombre_usuario, usuario)
+                                    SegundoMenu(nombre_usuario, usuario, decision_nose)
                                 
                                 if usuario_nya == "Dar de baja un turno":
                                     TercerMenu(nombre_usuario)
                                 
                                 if usuario_nya == "Finalizar":
-                                    continue
-                                break
+                                    break
                             else:
                                 print("Valor fuera de rango. Por favor, ingrese un número válido.")
                         except ValueError:
