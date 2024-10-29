@@ -1,0 +1,2 @@
+Cardiologia;Dr. Martín Muñoz;2/11    10:30;Agustin Hernan;Gonzalez Monin;12345678;Luis Pasteur
+Dermatologia;Dr. Patricia Torres;22/1    07:00;Agustin Hernan;Gonzalez Monin;12345678;Luis Pasteur
