@@ -312,9 +312,11 @@ def PrimerMenu():
 
                                 if usuario_nya == "Reservar un turno":
                                     SegundoMenu(nombre_usuario, usuario)
+                                    return
                                     
                                 if usuario_nya == "Dar de baja un turno":
                                     TercerMenu(nombre_usuario)
+                                    return
                                     
                             else:
                                 print("Valor fuera de rango. Por favor, ingrese un número válido.")
@@ -448,16 +450,18 @@ def SegundoMenu(nombre_usuario, usuario):
 
                             if usuario_nya == "Reservar un turno nuevo":
                                 SegundoMenu(nombre_usuario, usuario)
+                                return
                                     
                             if usuario_nya == "Dar de baja un turno":
                                 TercerMenu(nombre_usuario)
+                                return
                                     
                             if usuario_nya == "Finalizar":
                                 return
                         else:
                             print("Valor fuera de rango. Por favor, ingrese un número válido.")
                     except ValueError:
-                        print("Entrada no válida. Por favor, ingrese un número.")
+                        print("Entrada no válida. Por favor, ingrese un número.")    
 
         except (FileNotFoundError, OSError) as error:
             print("Error de lectura: ", error)
@@ -468,46 +472,54 @@ def SegundoMenu(nombre_usuario, usuario):
                 pass
     else:
         return
-    
 
 def TercerMenu(nombre_usuario):
     try:
-        turnos_usuario = open(f"turnos_{nombre_usuario}.txt", "a")
-        
+        turnos_usuario = open(f"turnos_{nombre_usuario}.txt", "r")
+        turnos = []
         for linea in turnos_usuario:
-            datos_turno = linea.split(";")
-            lista_complementaria_datos_turno = [i+1 for i in range(len(datos_turno))]
+            turnos.append(linea)
+        turnos_usuario.close()
 
-            print("\n" + "=" * 40 + "\n")
-            print(f"Turnos del usuario {nombre_usuario}")
-            print("-" * 40)
-            for i in range(len(datos_turno)):
-                print(f"{lista_complementaria_datos_turno[i]} {datos_turno[i]}")
-            
-            print("\n" + "=" * 40 + "\n")
-            print()
-        
-            while True:
-                try:
-                    desicion_baja = int(input("Ingrese el número correspondiente a la especialidad que desee: "))
-                    if 1 <= desicion_baja <= len(lista_complementaria_datos_turno):
-                        turno_a_eliminar = datos_turno[desicion_baja - 1]
-                        for linea in turnos_usuario:
-                            if turno_a_eliminar != datos_turno:
-                                turnos_usuario.write(datos_turno[0] + ";" + datos_turno[1] + ";" + datos_turno[2] + ";" + datos_turno[3] + ";" + datos_turno[4] + ";" + datos_turno[5] + ";" + datos_turno[6] + "\n")
-                                break
-                    else:
-                        print("Valor fuera de rango. Por favor, ingrese un número válido.")
-                except ValueError:
-                    print("Entrada no válida. Por favor, ingrese un número.")
+        if not turnos:
+            print("No hay turnos registrados para este usuario.")
+            return
 
+        lista_complementaria_datos_turno = [i+1 for i in range(len(turnos))]
+
+        print("\n" + "=" * 40 + "\n")
+        print(f"Turnos del usuario {nombre_usuario}")
+        print("-" * 40)
+        for i in range(len(turnos)):
+            print(f"{lista_complementaria_datos_turno[i]} {turnos[i]}")
+        print("\n" + "=" * 40 + "\n")
+        print()
+    
+        while True:
+            try:
+                desicion_baja = int(input("Ingrese el número correspondiente al turno que desea eliminar: "))
+                if 1 <= desicion_baja <= len(lista_complementaria_datos_turno):
+                    turno_a_eliminar = turnos[desicion_baja - 1]
+                    turnos = [turno for turno in turnos if turno != turno_a_eliminar]
+                    
+                    try:
+                        turnos_usuario = open(f"turnos_{nombre_usuario}.txt", "w")
+                        for turno in turnos:
+                            turnos_usuario.write(turno)
+                        turnos_usuario.close()
+                    except OSError as mensaje:
+                        print("No se puede abrir el archivo: ", mensaje)
+                    
+                    print("Turno eliminado con éxito.")
+                    
+                    break
+                else:
+                    print("Valor fuera de rango. Por favor, ingrese un número válido.")
+            except ValueError:
+                print("Entrada no válida. Por favor, ingrese un número.")
     except OSError as mensaje:
-            print("No se puede abrir el archivo: ", mensaje)
-    finally:
-        try:
-            turnos_usuario.close()
-        except NameError:
-            pass
+        print("No se puede abrir el archivo: ", mensaje)
+
 #Main
 print("Bienvenido/a A Nuestro Sistema de Reserva de Turnos Médicos, Que desea hacer?")
 PrimerMenu()
