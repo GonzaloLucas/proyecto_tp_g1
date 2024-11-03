@@ -290,55 +290,77 @@ def PrimerMenu():
                 print(f"Has seleccionado: {turno_usuario}")
                 if turno_usuario == "Registrarse":
                     RegistrarUsuario()
-                    decision_recursiva= ("desea volver al menu principal? (y/n): ")
-                    if decision_recursiva == "y":
-                        PrimerMenu()
-                    else:
-                        continue
+                decision_recursiva= ("desea volver al menu principal? (y/n): ")
+                if decision_recursiva == "y":
+                    PrimerMenu()
+                else:
+                    return
 
                 if turno_usuario == "Iniciar Sesión":
                     nombre_usuario, usuario = IniciarSesion()
-                    decision_nose=input("Desea reservar un turno? (y/n): ")
-                    if decision_nose == "y":
-                        SegundoMenu(nombre_usuario, usuario, decision_nose)
-                    else:
-                        continue
+                    menu_nya = ["Reservar un turno", "Dar de baja un turno"]
+                    lista_complementaria_menu_nya = [i+1 for i in range(len(menu_nya))]
+                    print("\n" + "=" * 40 + "\n")
+                    print("Seleccione una opcion de lo que desea hacer")
+                    print("-" * 40)
+                    for i in range(len(menu_nya)):
+                        print(f"{lista_complementaria_menu_nya[i]} {menu_nya[i]}")
+                    print("\n" + "=" * 40 + "\n")
+                    print()
+                    while True:
+                        try:
+                            desicion_u = int(input("Ingrese el número correspondiente a lo que desee: "))
+                            if 1 <= desicion_u <= len(lista_complementaria_menu_nya):
+                                usuario_nya = menu_nya[desicion_u - 1]
+                                print(f"Has seleccionado: {usuario_nya}")
+
+                                if usuario_nya == "Reservar un turno":
+                                    SegundoMenu(nombre_usuario, usuario)
+                                    
+                                if usuario_nya == "Dar de baja un turno":
+                                    TercerMenu(nombre_usuario)
+                                    
+                            else:
+                                print("Valor fuera de rango. Por favor, ingrese un número válido.")
+                        except ValueError:
+                            print("Entrada no válida. Por favor, ingrese un número.")
                 break
             else:
                 print("Valor fuera de rango. Por favor, ingrese un número válido.")
         except ValueError:
             print("Entrada no válida. Por favor, ingrese un número.")
 
-def SegundoMenu(nombre_usuario, usuario, decision_nose):
+def SegundoMenu(nombre_usuario, usuario):
     DiccEspecialidades()
-    try:
-        especialidades_arch = open('especialidades.json', 'r')
-        especialidades = json.load(especialidades_arch)
-        especialidad = especialidades.keys()
-        lista_especialidad = list(especialidad)
-        lista_complementaria_especialidad = [i+1 for i in range(len(lista_especialidad))]
-        especialidad_usuario = 0
-        doctor = 0
-        lista_doctor = 0
-        lista_complementaria_doctor = 0
-        doctor_usuario = 0
-        horario = 0
-        lista_horario = 0
-        lista_complementaria_horario = 0
-        horario_usuario = 0
-        matriz_especialidad = [[lista_complementaria_especialidad[i], lista_especialidad[i]] for i in range(len(lista_especialidad))]
+    decision_nose = input("Desea reservaer un turno? (y/n): ")
+    if decision_nose == "y":
+        try:
+            especialidades_arch = open('especialidades.json', 'r')
+            especialidades = json.load(especialidades_arch)
+            especialidad = especialidades.keys()
+            lista_especialidad = list(especialidad)
+            lista_complementaria_especialidad = [i+1 for i in range(len(lista_especialidad))]
+            especialidad_usuario = 0
+            doctor = 0
+            lista_doctor = 0
+            lista_complementaria_doctor = 0
+            doctor_usuario = 0
+            horario = 0
+            lista_horario = 0
+            lista_complementaria_horario = 0
+            horario_usuario = 0
+            matriz_especialidad = [[lista_complementaria_especialidad[i], lista_especialidad[i]] for i in range(len(lista_especialidad))]
 
-        while True:
-            if decision_nose == "y":
+            while True:
                 print("\n" + "=" * 40 + "\n")
                 print("Especialidades")
                 print("-" * 40)
                 for i in range(len(lista_especialidad)):
                     print(f"{lista_complementaria_especialidad[i]} {lista_especialidad[i]}")
-            
+                
                 print("\n" + "=" * 40 + "\n")
                 print()
-        
+            
                 while True:
                     try:
                         desicion1 = int(input("Ingrese el número correspondiente a la especialidad que desee: "))
@@ -410,7 +432,7 @@ def SegundoMenu(nombre_usuario, usuario, decision_nose):
                         turnos_usuario.close()
                     except NameError:
                         pass
-                    
+                        
                 menu_nya = ["Reservar un turno nuevo", "Dar de baja un turno", "Finalizar"]
                 lista_complementaria_menu_nya = [i+1 for i in range(len(menu_nya))]
                 print("\n" + "=" * 40 + "\n")
@@ -429,26 +451,27 @@ def SegundoMenu(nombre_usuario, usuario, decision_nose):
                             print(f"Has seleccionado: {usuario_nya}")
 
                             if usuario_nya == "Reservar un turno nuevo":
-                                SegundoMenu(nombre_usuario, usuario, decision_nose)
-                                
+                                SegundoMenu(nombre_usuario, usuario)
+                                    
                             if usuario_nya == "Dar de baja un turno":
                                 TercerMenu(nombre_usuario)
-                                
+                                    
                             if usuario_nya == "Finalizar":
                                 return
                         else:
                             print("Valor fuera de rango. Por favor, ingrese un número válido.")
                     except ValueError:
                         print("Entrada no válida. Por favor, ingrese un número.")
-            else:
-                break
-    except (FileNotFoundError, OSError) as error:
-        print("Error de lectura: ", error)
-    finally:
-        try:
-            especialidades_arch.close()
-        except NameError:
-            pass
+
+        except (FileNotFoundError, OSError) as error:
+            print("Error de lectura: ", error)
+        finally:
+            try:
+                especialidades_arch.close()
+            except NameError:
+                pass
+    else:
+        return
     
 
 def TercerMenu(nombre_usuario):

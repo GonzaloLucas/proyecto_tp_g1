@@ -1,3 +1,5 @@
 gonzalolane@gmail.com;Amoaminovio123;Gonza69;Gonzalo Lucas;Lane;45135748;Samisalud
 agusgm@gmail.com;Chupala123;AgusGM;Agustin Hernan;Gonzalez Monin;12345678;Luis Pasteur
 sibinya@gmail.com;Gatitogamer321;SibiNya;Gaspar;Sibila;11111111;Obra Social Random
+pruebaregistro@gmail.com;Contraseña321;PruebaREG;Prueba;Reg;88888888;Obrarandom
+pruebaregistrodos@gmail.com;Contraseña987;PruebaREG2;Prueba;Reg Dos;77777777;Obrarandom
