@@ -3,3 +3,4 @@ agusgm@gmail.com;Chupala123;AgusGM;Agustin Hernan;Gonzalez Monin;12345678;Luis P
 sibinya@gmail.com;Gatitogamer321;SibiNya;Gaspar;Sibila;11111111;Obra Social Random
 pruebaregistro@gmail.com;Contraseña321;PruebaREG;Prueba;Reg;88888888;Obrarandom
 pruebaregistrodos@gmail.com;Contraseña987;PruebaREG2;Prueba;Reg Dos;77777777;Obrarandom
+pruebaregistrotres@gmail.com;Contraseña333;PruebaREG3;Prueba;Reg Tres;44444444;Obrarandom

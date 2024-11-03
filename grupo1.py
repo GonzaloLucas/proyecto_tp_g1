@@ -290,10 +290,6 @@ def PrimerMenu():
                 print(f"Has seleccionado: {turno_usuario}")
                 if turno_usuario == "Registrarse":
                     RegistrarUsuario()
-                decision_recursiva= ("desea volver al menu principal? (y/n): ")
-                if decision_recursiva == "y":
-                    PrimerMenu()
-                else:
                     return
 
                 if turno_usuario == "Iniciar Sesión":
