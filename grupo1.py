@@ -111,37 +111,47 @@ def RegistrarUsuario():
 
 def IniciarSesion():
     while True:
-        mail_usuario = input("Ingrese su mail: ")
-        posicion = mail_usuario.find("@gmail.com")
-        
-        if posicion == -1:
-            print("Mail inválido, ingrese nuevamente.")
-            continue
+        while True:
+            mail_usuario = input("Ingrese su mail: ")
+            posicion = mail_usuario.find("@gmail.com")
+            
+            if posicion == -1:
+                print("Mail inválido, ingrese nuevamente.")
+            else:
+                break
 
         try:
             ArchUsuario = open("usuarios.txt", "r")
             mail_existe = False
 
             for linea in ArchUsuario:
-                datos_usuario = linea.split(";")
+                datos_usuario = linea.strip().split(";")
+                
                 if len(datos_usuario) > 0 and datos_usuario[0] == mail_usuario:
                     mail_existe = True
-                    if mail_existe:
+
+                    while True:
                         pas_usuario = input("Ingrese su contraseña (debe ser alfanumérica y tener mínimo 8 caracteres): ")
-                        pas_existe  = False
-                        if len(datos_usuario) > 0 and datos_usuario[1] == pas_usuario:
-                            pas_existe = True
-                            if pas_existe:
-                                nombre_usuario = input("Ingrese su nombre de usuario (debe ser alfanumérico y tener mínimo 6 caracteres y sin espacios): ")
-                                nombre_existe = False
-                                if len(datos_usuario) > 0 and datos_usuario[2] == nombre_usuario:
-                                    nombre_existe = True
-                                    if nombre_existe:
-                                        print("Se a iniciado sesión con éxito")
-                                        dato = datos_usuario[3:7]
-                                        return nombre_usuario, dato
+                        if datos_usuario[1] == pas_usuario:
+                            break  
+                        else:
+                            print("Contraseña incorrecta, intente de nuevo.")
+
+                    while True:
+                        nombre_usuario = input("Ingrese su nombre de usuario (debe ser alfanumérico y tener mínimo 6 caracteres y sin espacios): ")
+                        if datos_usuario[2] == nombre_usuario:
+                            print("Se ha iniciado sesión con éxito")
+                            dato = datos_usuario[3:7]
+                            return nombre_usuario, dato
+                        else:
+                            print("Nombre de usuario incorrecto, intente de nuevo.")
+
+            if not mail_existe:
+                print("Correo no registrado. Intente nuevamente.")
+                
         except OSError as mensaje:
             print("No se puede abrir el archivo: ", mensaje)
+        
         finally:
             try:
                 ArchUsuario.close()
@@ -315,7 +325,7 @@ def PrimerMenu():
                                     return
                                     
                                 if usuario_nya == "Dar de baja un turno":
-                                    TercerMenu(nombre_usuario)
+                                    TercerMenu(nombre_usuario, usuario)
                                     return
                                     
                             else:
@@ -421,7 +431,7 @@ def SegundoMenu(nombre_usuario, usuario):
                         print("Entrada no válida. Por favor, ingrese un número.")
                 try:
                     turnos_usuario = open(f"turnos_{nombre_usuario}.txt", "a")
-                    turnos_usuario.write(especialidad_usuario + ";" + doctor_usuario + ";" + horario_usuario + ";" + usuario[0] + ";" + usuario[1] + ";" + usuario[2] + ";" + usuario[3])
+                    turnos_usuario.write(especialidad_usuario + ";" + doctor_usuario + ";" + horario_usuario + ";" + usuario[0] + ";" + usuario[1] + ";" + usuario[2] + ";" + usuario[3] + '\n')
                     print("Se guardó el turno con éxito")
                 except OSError as mensaje:
                     print("No se puede abrir el archivo: ", mensaje)
@@ -453,7 +463,7 @@ def SegundoMenu(nombre_usuario, usuario):
                                 return
                                     
                             if usuario_nya == "Dar de baja un turno":
-                                TercerMenu(nombre_usuario)
+                                TercerMenu(nombre_usuario, usuario)
                                 return
                                     
                             if usuario_nya == "Finalizar":
@@ -473,7 +483,7 @@ def SegundoMenu(nombre_usuario, usuario):
     else:
         return
 
-def TercerMenu(nombre_usuario):
+def TercerMenu(nombre_usuario, usuario):
     try:
         turnos_usuario = open(f"turnos_{nombre_usuario}.txt", "r")
         turnos = []
@@ -511,7 +521,9 @@ def TercerMenu(nombre_usuario):
                         print("No se puede abrir el archivo: ", mensaje)
                     
                     print("Turno eliminado con éxito.")
-                    
+                    decision_turno_nuevo = input("Desea reservar un turno nuevo? (y/n): ")
+                    if decision_turno_nuevo == "y":
+                        SegundoMenu(nombre_usuario, usuario)
                     break
                 else:
                     print("Valor fuera de rango. Por favor, ingrese un número válido.")

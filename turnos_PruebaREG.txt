@@ -1,0 +1,4 @@
+Cardiologia;Dr. Ramón Herrera;11/12    08:30;Prueba;Reg;88888888;Obrarandom
+Dermatologia;Dr. Roberto Medina;1/7    09:00;Prueba;Reg;88888888;Obrarandom
+Cirugia General;Dr. Patricia Torres;5/12    10:00;Prueba;Reg;88888888;Obrarandom
+Psiquiatria;Dr. Diego Núñez;1/6    22:30;Prueba;Reg;88888888;Obrarandom
