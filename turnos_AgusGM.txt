@@ -1,0 +1,7 @@
+Cardiologia;Dr. Valentina Morales;30/10    12:00;Agustin Hernan;Gonzalez Monin;12345678;Luis Pasteur
+Dermatologia;Dr. Roberto Medina;14/3    09:00;Agustin Hernan;Gonzalez Monin;12345678;Luis Pasteur
+Cirugia General;Dr. José Hernández;25/8    08:00;Agustin Hernan;Gonzalez Monin;12345678;Luis Pasteur
+Neumonologia;Dr. Raúl Rivas;27/2    16:30;Agustin Hernan;Gonzalez Monin;12345678;Luis Pasteur
+Endocrinologia;Dr. Antonio Jiménez;30/8    12:30;Agustin Hernan;Gonzalez Monin;12345678;Luis Pasteur
+Neurocirugia;Dr. Alberto Sánchez;7/8    15:30;Agustin Hernan;Gonzalez Monin;12345678;Luis Pasteur
+Traumatologia;Dr. Iván Aguilera;24/10    16:30;Agustin Hernan;Gonzalez Monin;12345678;Luis Pasteur
