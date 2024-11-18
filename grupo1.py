@@ -472,15 +472,15 @@ def SegundoMenu(nombre_usuario, usuario):
                                 SegundoMenu(nombre_usuario, usuario)
                                 return
                                     
-                            if usuario_nya == "Dar de baja un turno":
+                            elif usuario_nya == "Dar de baja un turno":
                                 TercerMenu(nombre_usuario, usuario)
                                 return
                             
-                            if usuario_nya == "Imprimir un turno":
+                            elif usuario_nya == "Imprimir un turno":
                                 CuartoMenu(nombre_usuario,usuario)
                                 return
                             
-                            if usuario_nya == "Finalizar":
+                            elif usuario_nya == "Finalizar":
                                 return
                         else:
                             print("Valor fuera de rango. Por favor, ingrese un número válido.")
@@ -494,8 +494,7 @@ def SegundoMenu(nombre_usuario, usuario):
                 especialidades_arch.close()
             except NameError:
                 pass
-    else:
-        return
+    return
 
 def TercerMenu(nombre_usuario, usuario):
     try:
@@ -578,7 +577,7 @@ def CuartoMenu(nombre_usuario, usuario):
                     nombre_turno_a_imprimir = turnos[desicion_impresion - 1]
                     turno_a_imprimir = nombre_turno_a_imprimir.strip().split(";")
                     ImpresionTurno(turno_a_imprimir, nombre_usuario)
-                    print("Su turno se imprimió con éxito.")
+                    print("Su turno se imprimio con exito.")
                     desicion_impresion_turno_nuevo = input("Desea imprimir un turno nuevo? (y/n): ")
                     if desicion_impresion_turno_nuevo == "y":
                         CuartoMenu(nombre_usuario, usuario)

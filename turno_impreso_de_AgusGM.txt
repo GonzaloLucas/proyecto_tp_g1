@@ -1,9 +1,9 @@
 ---------------------------------------------------------------
             Reserva de turno            
 
-Especialidad:............................ Neurocirugia
-Doctor:.................................. Dr. Valentina Morales
-Horario:................................. 27/1    21:30
+Especialidad:............................ Gastroenterologia
+Doctor:.................................. Dr. Teresa Serrano
+Horario:................................. 17/7    12:30
 Nombre completo:......................... Agustin Hernan Gonzalez Monin
 DNI:..................................... 12345678
 Obra Social:............................. Luis Pasteur
