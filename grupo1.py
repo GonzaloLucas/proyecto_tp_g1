@@ -327,11 +327,11 @@ def PrimerMenu():
 
                                 if usuario_nya == "Reservar un turno":
                                     SegundoMenu(nombre_usuario, usuario)
-                                    break
+                                    return
                                     
                                 if usuario_nya == "Dar de baja un turno":
                                     TercerMenu(nombre_usuario, usuario)
-                                    break
+                                    return
                                     
                             else:
                                 print("Valor fuera de rango. Por favor, ingrese un número válido.")
@@ -465,7 +465,7 @@ def SegundoMenu(nombre_usuario, usuario):
 
                             if usuario_nya == "Reservar un turno nuevo":
                                 SegundoMenu(nombre_usuario, usuario)
-                                break
+                                return
                                     
                             if usuario_nya == "Dar de baja un turno":
                                 TercerMenu(nombre_usuario, usuario)
@@ -573,6 +573,7 @@ def CuartoMenu(nombre_usuario, usuario):
                     nombre_turno_a_imprimir = turnos[desicion_impresion - 1]
                     turno_a_imprimir = nombre_turno_a_imprimir.strip().split(";")
                     ImpresionTurno(turno_a_imprimir, nombre_usuario)
+                    print("Su turno se imprimio con exito.")
                     desicion_impresion_turno_nuevo = input("Desea imprimir un turno nuevo? (y/n): ")
                     if desicion_impresion_turno_nuevo == "y":
                         CuartoMenu(nombre_usuario, usuario)

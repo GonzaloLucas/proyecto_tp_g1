@@ -1,9 +1,9 @@
 ---------------------------------------------------------------
             Reserva de turno            
 
-Especialidad:............................ Endocrinologia
-Doctor:.................................. Dr. Antonio Jiménez
-Horario:................................. 30/8    12:30
+Especialidad:............................ Oftalmologia
+Doctor:.................................. Dr. Laura López
+Horario:................................. 18/8    22:30
 Nombre completo:......................... Agustin Hernan Gonzalez Monin
 DNI:..................................... 12345678
 Obra Social:............................. Luis Pasteur
