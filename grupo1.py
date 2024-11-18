@@ -332,11 +332,11 @@ def PrimerMenu():
 
                                 if usuario_nya == "Reservar un turno":
                                     SegundoMenu(nombre_usuario, usuario)
-                                    return
+                                    break
                                     
                                 if usuario_nya == "Dar de baja un turno":
                                     TercerMenu(nombre_usuario, usuario)
-                                    return
+                                    break
                                     
                             else:
                                 print("Valor fuera de rango. Por favor, ingrese un número válido.")
@@ -469,16 +469,13 @@ def SegundoMenu(nombre_usuario, usuario):
                             print(f"Has seleccionado: {usuario_nya}")
 
                             if usuario_nya == "Reservar un turno nuevo":
-                                SegundoMenu(nombre_usuario, usuario)
-                                return
+                                break
                                     
                             elif usuario_nya == "Dar de baja un turno":
                                 TercerMenu(nombre_usuario, usuario)
-                                return
                             
                             elif usuario_nya == "Imprimir un turno":
                                 CuartoMenu(nombre_usuario,usuario)
-                                return
                             
                             elif usuario_nya == "Finalizar":
                                 return
