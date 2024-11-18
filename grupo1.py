@@ -284,6 +284,11 @@ def ImpresionTurno(turno_a_imprimir, nombre_usuario):
             turno_impreso.write("\n")
         except OSError as mensaje:
                     print("No se puede abrir el archivo: ", mensaje)
+        finally:
+            try:
+                turno_impreso.close()
+            except NameError:
+                pass
         return turno_impreso
 
 def PrimerMenu():
@@ -573,7 +578,7 @@ def CuartoMenu(nombre_usuario, usuario):
                     nombre_turno_a_imprimir = turnos[desicion_impresion - 1]
                     turno_a_imprimir = nombre_turno_a_imprimir.strip().split(";")
                     ImpresionTurno(turno_a_imprimir, nombre_usuario)
-                    print("Su turno se imprimio con exito.")
+                    print("Su turno se imprimió con éxito.")
                     desicion_impresion_turno_nuevo = input("Desea imprimir un turno nuevo? (y/n): ")
                     if desicion_impresion_turno_nuevo == "y":
                         CuartoMenu(nombre_usuario, usuario)
