@@ -1,0 +1,6 @@
+Cardiologia;Dr. Juan Pérez;7/11    13:30;Gonzalo Lucas;Lane;45135748;Samisalud
+Psiquiatria;Dr. Esteban Castillo;14/5    19:30;Gonzalo Lucas;Lane;45135748;Samisalud
+Traumatologia;Dr. Camila Rodríguez;18/8    22:30;Gonzalo Lucas;Lane;45135748;Samisalud
+Cirugia General;Dr. Daniela Mendoza;19/2    13:00;Gonzalo Lucas;Lane;45135748;Samisalud
+Neumonologia;Dr. Catalina Silva;14/11    15:00;Gonzalo Lucas;Lane;45135748;Samisalud
+Endocrinologia;Dr. Adriana Reyes;3/12    08:00;Gonzalo Lucas;Lane;45135748;Samisalud

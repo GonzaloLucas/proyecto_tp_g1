@@ -314,34 +314,7 @@ def PrimerMenu():
 
                 if turno_usuario == "Iniciar Sesión":
                     nombre_usuario, usuario = IniciarSesion()
-                    menu_nya = ["Reservar un turno", "Dar de baja un turno"]
-                    lista_complementaria_menu_nya = [i+1 for i in range(len(menu_nya))]
-                    print("\n" + "=" * 40 + "\n")
-                    print("Seleccione una opcion de lo que desea hacer")
-                    print("-" * 40)
-                    for i in range(len(menu_nya)):
-                        print(f"{lista_complementaria_menu_nya[i]} {menu_nya[i]}")
-                    print("\n" + "=" * 40 + "\n")
-                    print()
-                    while True:
-                        try:
-                            desicion_u = int(input("Ingrese el número correspondiente a lo que desee: "))
-                            if 1 <= desicion_u <= len(lista_complementaria_menu_nya):
-                                usuario_nya = menu_nya[desicion_u - 1]
-                                print(f"Has seleccionado: {usuario_nya}")
-
-                                if usuario_nya == "Reservar un turno":
-                                    SegundoMenu(nombre_usuario, usuario)
-                                    break
-                                    
-                                if usuario_nya == "Dar de baja un turno":
-                                    TercerMenu(nombre_usuario, usuario)
-                                    break
-                                    
-                            else:
-                                print("Valor fuera de rango. Por favor, ingrese un número válido.")
-                        except ValueError:
-                            print("Entrada no válida. Por favor, ingrese un número.")
+                    MenuPrincipal(nombre_usuario, usuario)
                 break
             else:
                 print("Valor fuera de rango. Por favor, ingrese un número válido.")
@@ -443,6 +416,7 @@ def SegundoMenu(nombre_usuario, usuario):
                     turnos_usuario = open(f"turnos_{nombre_usuario}.txt", "a")
                     turnos_usuario.write(especialidad_usuario + ";" + doctor_usuario + ";" + horario_usuario + ";" + usuario[0] + ";" + usuario[1] + ";" + usuario[2] + ";" + usuario[3] + '\n')
                     print("Se guardó el turno con éxito")
+                    break
                 except OSError as mensaje:
                     print("No se puede abrir el archivo: ", mensaje)
                 finally:
@@ -450,39 +424,6 @@ def SegundoMenu(nombre_usuario, usuario):
                         turnos_usuario.close()
                     except NameError:
                         pass
-                        
-                menu_nya = ["Reservar un turno nuevo", "Dar de baja un turno","Imprimir un turno", "Finalizar"]
-                lista_complementaria_menu_nya = [i+1 for i in range(len(menu_nya))]
-                print("\n" + "=" * 40 + "\n")
-                print("Seleccione una opcion de lo que desea hacer")
-                print("-" * 40)
-                for i in range(len(menu_nya)):
-                    print(f"{lista_complementaria_menu_nya[i]} {menu_nya[i]}")
-                print("\n" + "=" * 40 + "\n")
-                print()
-
-                while True:
-                    try:
-                        desicion_u = int(input("Ingrese el número correspondiente a lo que desee: "))
-                        if 1 <= desicion_u <= len(lista_complementaria_menu_nya):
-                            usuario_nya = menu_nya[desicion_u - 1]
-                            print(f"Has seleccionado: {usuario_nya}")
-
-                            if usuario_nya == "Reservar un turno nuevo":
-                                break
-                                    
-                            elif usuario_nya == "Dar de baja un turno":
-                                TercerMenu(nombre_usuario, usuario)
-                            
-                            elif usuario_nya == "Imprimir un turno":
-                                CuartoMenu(nombre_usuario,usuario)
-                            
-                            elif usuario_nya == "Finalizar":
-                                return
-                        else:
-                            print("Valor fuera de rango. Por favor, ingrese un número válido.")
-                    except ValueError:
-                        print("Entrada no válida. Por favor, ingrese un número.")    
 
         except (FileNotFoundError, OSError) as error:
             print("Error de lectura: ", error)
@@ -491,9 +432,9 @@ def SegundoMenu(nombre_usuario, usuario):
                 especialidades_arch.close()
             except NameError:
                 pass
-    return
+        MenuPrincipal(nombre_usuario, usuario)
 
-def TercerMenu(nombre_usuario, usuario):
+def MenuEliminarTurno(nombre_usuario, usuario):
     try:
         turnos_usuario = open(f"turnos_{nombre_usuario}.txt", "r")
         turnos = []
@@ -531,13 +472,6 @@ def TercerMenu(nombre_usuario, usuario):
                         print("No se puede abrir el archivo: ", mensaje)
                     
                     print("Turno eliminado con éxito.")
-                    decision_turno_nuevo = input("Desea reservar un turno nuevo? (y/n): ")
-                    if decision_turno_nuevo == "y":
-                        SegundoMenu(nombre_usuario, usuario)
-                    else:
-                        decision_imprimir_turno = input("Desea imprimir un turno? (y/n): ")
-                        if decision_imprimir_turno == "y":
-                            CuartoMenu(nombre_usuario, usuario)
                     break
                 else:
                     print("Valor fuera de rango. Por favor, ingrese un número válido.")
@@ -546,7 +480,7 @@ def TercerMenu(nombre_usuario, usuario):
     except OSError as mensaje:
         print("No se puede abrir el archivo: ", mensaje)
 
-def CuartoMenu(nombre_usuario, usuario):
+def MenuImprimirTurno(nombre_usuario, usuario):
     try:
         turnos_usuario = open(f"turnos_{nombre_usuario}.txt", "r")
         turnos = []
@@ -575,12 +509,44 @@ def CuartoMenu(nombre_usuario, usuario):
                     turno_a_imprimir = nombre_turno_a_imprimir.strip().split(";")
                     ImpresionTurno(turno_a_imprimir, nombre_usuario)
                     print("Su turno se imprimio con exito.")
-                    desicion_impresion_turno_nuevo = input("Desea imprimir un turno nuevo? (y/n): ")
-                    if desicion_impresion_turno_nuevo == "y":
-                        CuartoMenu(nombre_usuario, usuario)
                     break
     except OSError as mensaje:
         print("No se puede abrir el archivo: ", mensaje)
+
+def MenuPrincipal(nombre_usuario, usuario):
+    while True:
+        try:
+            menu_nya = ["Reservar un turno nuevo", "Dar de baja un turno","Imprimir un turno", "Finalizar"]
+            lista_complementaria_menu_nya = [i+1 for i in range(len(menu_nya))]
+            print("\n" + "=" * 40 + "\n")
+            print("Seleccione una opcion de lo que desea hacer")
+            print("-" * 40)
+            for i in range(len(menu_nya)):
+                print(f"{lista_complementaria_menu_nya[i]} {menu_nya[i]}")
+            print("\n" + "=" * 40 + "\n")
+            print()
+            desicion_u = int(input("Ingrese el número correspondiente a lo que desee: "))
+            if 1 <= desicion_u <= len(lista_complementaria_menu_nya):
+                usuario_nya = menu_nya[desicion_u - 1]
+                print(f"Has seleccionado: {usuario_nya}")
+
+                if usuario_nya == "Reservar un turno nuevo":
+                    SegundoMenu(nombre_usuario, usuario)
+                    break
+                                    
+                elif usuario_nya == "Dar de baja un turno":
+                    MenuEliminarTurno(nombre_usuario, usuario)
+                            
+                elif usuario_nya == "Imprimir un turno":
+                    MenuImprimirTurno(nombre_usuario, usuario)
+                            
+                elif usuario_nya == "Finalizar":
+                    return
+            else:
+                print("Valor fuera de rango. Por favor, ingrese un número válido.")
+        except ValueError:
+            print("Entrada no válida. Por favor, ingrese un número.")
+
 #Main
 print("Bienvenido/a A Nuestro Sistema de Reserva de Turnos Médicos, Que desea hacer?")
 PrimerMenu()
