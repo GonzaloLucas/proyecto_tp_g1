@@ -3,11 +3,20 @@ import json
 
 def RegistrarUsuario():
     while True:
-        mail_usuario = input("Ingrese su mail: ")
+        mail_usuario = input("Ingrese su mail: ").strip()
         posicion = mail_usuario.find("@gmail.com")
+        posicion_final = len(mail_usuario) - len("@gmail.com")
         
-        if posicion == -1:
+        if posicion == -1 or posicion != posicion_final:
             print("Mail inválido, ingrese nuevamente.")
+            continue
+        
+        if posicion == 0:
+            print("Mail inválido, la estructura es incorrecta")
+            continue
+
+        if " " in mail_usuario:
+            print("Mail invalido, no puede contener espacios")
             continue
         
         try:
